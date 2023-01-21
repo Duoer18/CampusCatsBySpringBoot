@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: /CampusCats
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///campus_cat_feeding?useSSL=false&useServerPrepStmts=true
+    username:
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
