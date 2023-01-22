@@ -104,7 +104,7 @@ public interface RecordService {
      * @param type 类型
      * @return 状态码
      */
-    int deleteRecord(int[] ids, String type);
+    int deleteRecord(int[] ids, String type, String username, Boolean isAdmin);
 
     /**
      * 删除某些临时表记录

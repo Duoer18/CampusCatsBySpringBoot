@@ -148,12 +148,12 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public int deleteRecord(int[] ids, String type) {
+    public int deleteRecord(int[] ids, String type, String username, Boolean isAdmin) {
         int deleteStatus = 1;
         if (type.equals("feeding")) {
-            recordMapper.deleteFeedingRecordsByIds(ids);
+            recordMapper.deleteFeedingRecordsByIds(ids, username, isAdmin);
         } else if (type.equals("appearance")) {
-            recordMapper.deleteAppearanceRecordsByIds(ids);
+            recordMapper.deleteAppearanceRecordsByIds(ids, username, isAdmin);
         } else {
             deleteStatus = 0;
         }

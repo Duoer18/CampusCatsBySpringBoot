@@ -40,7 +40,9 @@ public interface RecordMapper {
             "(null, #{catId}, #{username}, #{locationId}, #{recordTime}, #{remarks}, NOW(), #{formerId})")
     void insertFeedingRecordTmp(FeedingRecord fr);
 
-    void deleteFeedingRecordsByIds(@Param("ids") int[] ids);
+    void deleteFeedingRecordsByIds(@Param("ids") int[] ids,
+                                   @Param("username") String username,
+                                   @Param("isAdmin") Boolean isAdmin);
 
     void deleteFeedingRecordsByIdsTmp(@Param("ids") int[] ids);
 
@@ -79,7 +81,9 @@ public interface RecordMapper {
             "(null, #{catId}, #{username}, #{locationId}, #{recordTime}, NOW(), #{formerId})")
     void insertAppearanceRecordTmp(AppearanceRecord ar);
 
-    void deleteAppearanceRecordsByIds(@Param("ids") int[] ids);
+    void deleteAppearanceRecordsByIds(@Param("ids") int[] ids,
+                                      @Param("username") String username,
+                                      @Param("isAdmin") Boolean isAdmin);
 
     void deleteAppearanceRecordsByIdsTmp(@Param("ids") int[] ids);
 

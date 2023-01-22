@@ -84,9 +84,13 @@ public class FeedingRecordController {
      * @return 状态码
      */
     @DeleteMapping
-    public Result deleteRecord(@RequestBody int[] ids) {
+    public Result deleteRecord(@RequestBody int[] ids, HttpSession session) {
         System.out.println(Arrays.toString(ids));
-        int status = recordService.deleteRecord(ids, "feeding");
+        String username = (String) session.getAttribute("username");
+        username = username != null ? username : "";
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        isAdmin = isAdmin != null ? isAdmin : false;
+        int status = recordService.deleteRecord(ids, "feeding", username, isAdmin);
         int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         String msg = status == 1 ? "" : "删除记录失败！";
         return new Result(code, status, msg);
