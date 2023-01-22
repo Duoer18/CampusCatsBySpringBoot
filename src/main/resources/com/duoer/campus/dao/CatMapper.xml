@@ -36,27 +36,27 @@
         where cat_id = #{catId}
     </update>
 
-    <select id="randomSelect" resultType="com.duoer.campus.entity.Cat">
+    <select id="randomSelect" resultMap="catRM">
         /* use if */
         select * from cat
         <where>
             <if test="catId != null">
-                cat_id = #{catId},
+                and cat_id = #{catId}
             </if>
             <if test="catName != null">
-                cat_name = #{catName},
+                and cat_name = #{catName}
             </if>
             <if test="categoryId != null">
-                category_id = #{categoryId},
+                and category_id = #{categoryId}
             </if>
             <if test="colorId != null">
-                color_id = #{colorId},
+                and color_id = #{colorId}
             </if>
             <if test="characterId != null">
-                character_id = #{characterId},
+                and character_id = #{characterId}
             </if>
             <if test="locationId != null">
-                location_id = #{locationId}
+                and location_id = #{locationId}
             </if>
         </where>
     </select>
