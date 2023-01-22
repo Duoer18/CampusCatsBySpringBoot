@@ -26,8 +26,7 @@
       >* mybatis：持久层框架
       >* mysql8：数据库
 * ### 启动
-  > 使用IntelliJ IDEA打开项目，安装Maven Helper插件；
-  > 运行catFeeding.sql脚本将表导入数据库；
+  > 使用IntelliJ IDEA打开项目；运行catFeeding.sql脚本将 表导入数据库；
   > 修改/src/main/resources/application.yml中
   > driver-class-name(数据库驱动类名，本人采用druid，可不修改)、
   > url(数据库url)、username(用户名)、password(密码)
