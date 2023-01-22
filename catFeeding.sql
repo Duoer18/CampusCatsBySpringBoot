@@ -13,7 +13,7 @@ drop trigger frecord_after_delete;
 drop trigger frecord_after_insert;
 
 drop
-    table if exists catInfoView;
+    table if exists catinfoview;
 
 drop index cat_name_index on cat;
 
@@ -203,9 +203,9 @@ create table user_info
 );
 
 /*==============================================================*/
-/* View: catInfoView                                            */
+/* View: catinfoview                                            */
 /*==============================================================*/
-create VIEW catInfoView
+create VIEW catinfoview
 as
 select cat.cat_id,
        cat.cat_name,

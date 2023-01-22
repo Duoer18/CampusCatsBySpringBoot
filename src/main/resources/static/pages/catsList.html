@@ -47,7 +47,7 @@
                     <input type="button" @click="add('appearance', cat.catId)" class="btn btn-primary" value="添加出现记录">
                     <input type="button" @click="add('feeding', cat.catId)" class="btn btn-primary" value="添加投喂记录">
                     <input type="button" @click="catRecords(cat.catId)" class="btn btn-primary" value="查看所有记录">
-                    <span id="adminOp" v-if="user.admin" class="btn-group-sm">
+                    <span id="adminOp" v-if="user.isAdmin" class="btn-group-sm">
                         <input type="button" @click="upd(cat.catId)" class="btn btn-primary" value="修改">
                         <input type="button" @click="del(cat.catId)" class="btn btn-primary" value="删除">
                     </span>

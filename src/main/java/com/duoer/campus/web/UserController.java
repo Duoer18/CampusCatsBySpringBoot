@@ -106,7 +106,7 @@ public class UserController {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         User u = new User();
         u.setUsername(username != null ? username : "visitor");
-        u.setAdmin(isAdmin != null ? isAdmin : false);
+        u.setIsAdmin(isAdmin != null ? isAdmin : false);
         return new Result(ResponseCode.GET_SUC.getCode(), u);
     }
 }

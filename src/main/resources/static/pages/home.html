@@ -28,7 +28,7 @@
     <input type="button" id="logoutBtn" class="btn btn-primary btn-sm" v-if="user.username !== 'visitor'"
            onclick="location.href = '/CampusCats/logout'" value="注销">
     </div>
-    <div id="adminOp" v-if="user.admin">
+    <div id="adminOp" v-if="user.isAdmin">
         <hr>
         <input type="button" id="catCheck" class="btn btn-primary btn-sm" style="margin-left: 0.5%"
                onclick="location.href = '/CampusCats/adminCats'" value="猫咪添加审核">

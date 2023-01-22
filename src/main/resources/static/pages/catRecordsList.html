@@ -37,7 +37,7 @@
                 <th>投喂时间</th>
                 <th>食物</th>
                 <th>上次更新时间</th>
-                <th v-if="user.admin">操作</th>
+                <th v-if="user.isAdmin">操作</th>
             </tr>
             <tr v-for="feeding in feedings.data">
                 <td>{{feeding.recordId}}</td>
@@ -47,7 +47,7 @@
                 <td>{{feeding.recordTime}}</td>
                 <td>{{feeding.remarks}}</td>
                 <td>{{feeding.lastUpdate}}</td>
-                <td v-if="user.admin">
+                <td v-if="user.isAdmin">
                     <input type="button" class="btn btn-primary btn-sm" value="修改"
                            @click="upd('feeding', feeding.recordId)">
                     <input type="button" class="btn btn-primary btn-sm" value="删除"
@@ -70,7 +70,7 @@
                 <th>出现位置</th>
                 <th>出现时间</th>
                 <th>上次更新时间</th>
-                <th v-if="user.admin">操作</th>
+                <th v-if="user.isAdmin">操作</th>
             </tr>
             <tr v-for="appearance in appearances.data">
                 <td>{{appearance.recordId}}</td>
@@ -79,7 +79,7 @@
                 <td>{{appearance.location}}</td>
                 <td>{{appearance.recordTime}}</td>
                 <td>{{appearance.lastUpdate}}</td>
-                <td v-if="user.admin">
+                <td v-if="user.isAdmin">
                     <input type="button" class="btn btn-primary btn-sm" value="修改"
                            @click="upd('appearance', appearance.recordId)">
                     <input type="button" class="btn btn-primary btn-sm" value="删除"

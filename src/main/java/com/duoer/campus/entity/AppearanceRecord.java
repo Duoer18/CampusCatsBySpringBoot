@@ -1,18 +1,9 @@
 package com.duoer.campus.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class AppearanceRecord extends MyRecord {
-    @Override
-    public String toString() {
-        return "AppearanceRecord{" +
-                "recordId=" + recordId +
-                ", catId=" + catId +
-                ", catName='" + catName + '\'' +
-                ", username='" + username + '\'' +
-                ", locationId=" + locationId +
-                ", location='" + location + '\'' +
-                ", recordTime='" + recordTime + '\'' +
-                ", lastUpdate='" + lastUpdate + '\'' +
-                ", formerId=" + formerId +
-                '}';
-    }
 }

@@ -38,7 +38,7 @@
 
     <select id="randomSelect" resultMap="catRM">
         /* use if */
-        select * from cat
+        select * from catinfoview
         <where>
             <if test="catId != null">
                 and cat_id = #{catId}
