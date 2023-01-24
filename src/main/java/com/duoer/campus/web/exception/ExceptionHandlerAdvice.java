@@ -43,14 +43,6 @@ public class ExceptionHandlerAdvice {
         return new Result(ResponseCode.BUS_ERR.getCode(), null, "错误的请求方式！");
     }
 
-    @ExceptionHandler(MissingRequestCookieException.class)
-    public Result missingCookie() {
-        User u = new User();
-        u.setUsername("");
-        u.setPassword("");
-        return new Result(ResponseCode.GET_SUC.getCode(), u);
-    }
-
     @ExceptionHandler(SQLException.class)
     public Result sqlException() {
         return new Result(ResponseCode.SYS_ERR.getCode(), null, "系统繁忙，请稍后！");

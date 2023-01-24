@@ -62,7 +62,8 @@ public class UserController {
     }
 
     @RequestMapping("/acc")
-    public Result getAccount(@CookieValue("username") String username, @CookieValue("password") String password) {
+    public Result getAccount(@CookieValue(value = "username", required = false) String username,
+                             @CookieValue(value = "password", required = false) String password) {
         User u = new User();
         u.setUsername(username);
         u.setPassword(password);
