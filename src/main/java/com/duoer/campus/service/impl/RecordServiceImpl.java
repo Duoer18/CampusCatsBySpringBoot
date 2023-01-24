@@ -77,6 +77,7 @@ public class RecordServiceImpl implements RecordService {
      * @param type     类型
      * @return 所有记录集合
      */
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public List<? extends RecordDTO> getAllRecordsByUsername(String username, String type) {
         if (type.equals("feeding")) {
@@ -232,29 +233,6 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public int addRecordCheckPass(int id, String type) {
         if (type.equals("feeding")) {
-            /*synchronized (RecordLock.getFeedingLock(id)) {
-                FeedingRecordTemp fr = feedingRecordTempMapper.selectById(id);
-                if (fr != null) {
-                    feedingRecordTempMapper.deleteById(id);
-                    FeedingRecord r = new FeedingRecord(
-                            null,
-                            fr.getCatId(),
-                            fr.getUsername(),
-                            fr.getLocationId(),
-                            fr.getRecordTime(),
-                            fr.getLastUpdate(),
-                            fr.getRemarks()
-                    );
-                    if (fr.getFormerId() == -1) {
-                        return feedingRecordMapper.insert(r);
-                    } else {
-                        r.setRecordId(fr.getFormerId());
-                        return updateRecord(r);
-                    }
-                } else {
-                    return 0;
-                }
-            }*/
             FeedingRecordTemp fr = feedingRecordTempMapper.selectById(id);
             if (fr != null && feedingRecordTempMapper.myDeleteById(id, fr.getVersion()) == 1) {
                 if (fr.getFormerId() == -1) {
@@ -267,28 +245,6 @@ public class RecordServiceImpl implements RecordService {
             }
             return 0;
         } else if (type.equals("appearance")) {
-            /*synchronized (RecordLock.getAppearanceLock(id)) {
-                AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(id);
-                if (ar != null) {
-                    appearanceRecordTempMapper.deleteById(id);
-                    AppearanceRecord r = new AppearanceRecord(
-                            null,
-                            ar.getCatId(),
-                            ar.getUsername(),
-                            ar.getLocationId(),
-                            ar.getRecordTime(),
-                            ar.getLastUpdate()
-                    );
-                    if (ar.getFormerId() == -1) {
-                        return appearanceRecordMapper.insert(r);
-                    } else {
-                        r.setRecordId(ar.getFormerId());
-                        return updateRecord(r);
-                    }
-                } else {
-                    return 0;
-                }
-            }*/
             AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(id);
             if (ar != null && appearanceRecordTempMapper.myDeleteById(id, ar.getVersion()) == 1) {
                 if (ar.getFormerId() == -1) {
