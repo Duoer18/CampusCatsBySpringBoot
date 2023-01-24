@@ -10,7 +10,7 @@ import com.duoer.campus.entity.CatTemp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component()
+@Component
 public class CatDTOWrapper {
     @Autowired
     private CategoryMapper categoryMapper;

@@ -1,13 +1,11 @@
 package com.duoer.campus.web.exception;
 
-import com.duoer.campus.entity.User;
 import com.duoer.campus.exception.BusinessException;
 import com.duoer.campus.exception.SystemException;
 import com.duoer.campus.web.format.ResponseCode;
 import com.duoer.campus.web.format.Result;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;

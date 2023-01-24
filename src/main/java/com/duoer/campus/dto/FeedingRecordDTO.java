@@ -1,12 +1,11 @@
 package com.duoer.campus.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Data
+@NoArgsConstructor
 public class FeedingRecordDTO extends RecordDTO {
     private String remarks;
     private Integer formerId;
