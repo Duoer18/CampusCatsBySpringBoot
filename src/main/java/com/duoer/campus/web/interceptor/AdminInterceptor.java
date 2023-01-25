@@ -24,7 +24,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         isAdmin = isAdmin != null ? isAdmin : false;
         if (!isAdmin) {
-            response.sendRedirect("/CampusCats4U/home");
+            response.sendRedirect("/CampusCats/home");
         }
         return isAdmin;
     }

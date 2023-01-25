@@ -5,6 +5,7 @@ import com.duoer.campus.web.interceptor.LogInInterceptor;
 import com.duoer.campus.web.interceptor.NoCacheInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -29,5 +30,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(noCacheInterceptor).addPathPatterns("/pages/admin/*", "/users");
     }
 
-
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .maxAge(3600);
+    }
 }
