@@ -5,6 +5,6 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:///campus_cats?useSSL=false&useServerPrepStmts=true
+    url: jdbc:mysql:///campus_cats_1?useSSL=false&useServerPrepStmts=true
     username:
     password:
