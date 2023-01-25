@@ -100,11 +100,13 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            feedings: {},
-            appearances: {},
-            success: false,
-            failed: false
+        data() {
+            return {
+                feedings: {},
+                appearances: {},
+                success: false,
+                failed: false
+            };
         },
         async mounted() {
             await userMsg('');

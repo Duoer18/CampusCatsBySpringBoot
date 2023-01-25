@@ -13,5 +13,5 @@ public interface AppearanceRecordTempMapper extends BaseMapper<AppearanceRecordT
      */
     @Update("update appearance_record_tmp set deleted = 1, version = version + 1 " +
             "where record_id = #{id} and version = #{version} and deleted = 0")
-    int myDeleteById(@Param("id") int id, @Param("version") int version);
+    int myDeleteById(@Param("id") long id, @Param("version") int version);
 }

@@ -14,13 +14,13 @@ import lombok.ToString;
 @Data
 @TableName("feeding_record_tmp")
 public class FeedingRecordTemp extends FeedingRecord {
-    private Integer formerId;
+    private Long formerId;
     @TableLogic(value = "0", delval = "1")
     private Integer deleted;
     @Version
     private Integer version;
 
-    public FeedingRecordTemp(FeedingRecord fr, Integer formerId) {
+    public FeedingRecordTemp(FeedingRecord fr, Long formerId) {
         super(null, fr.getCatId(), fr.getUsername(),
                 fr.getLocationId(), fr.getRecordTime(), fr.getLastUpdate(), fr.getRemarks());
         this.formerId = formerId;

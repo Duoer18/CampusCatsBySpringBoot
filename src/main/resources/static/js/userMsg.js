@@ -1,6 +1,6 @@
 const myAxios = axios.create(
     {
-        baseURL: '/CampusCats'
+        baseURL: 'http://localhost:8080/CampusCats'
     }
 );
 async function userMsg(title) {

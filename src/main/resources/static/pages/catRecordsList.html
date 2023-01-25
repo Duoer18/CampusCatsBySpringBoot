@@ -96,12 +96,14 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            user: {},
-            catId: window.location.href.split('=')[1],
-            cat: {},
-            feedings: {},
-            appearances: {}
+        data() {
+            return {
+                user: {},
+                catId: window.location.href.split('=')[1],
+                cat: {},
+                feedings: {},
+                appearances: {}
+            };
         },
         async mounted() {
             this.user = await userMsg('');

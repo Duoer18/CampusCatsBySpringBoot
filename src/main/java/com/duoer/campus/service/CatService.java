@@ -28,7 +28,7 @@ public interface CatService {
      * @param isTmp 是否临时表
      * @return 猫咪对象
      */
-    CatDTO getCatById(int id, boolean isTmp);
+    CatDTO getCatById(long id, boolean isTmp);
 
     /**
      * 多条件查找
@@ -44,7 +44,7 @@ public interface CatService {
      * @param id 编号
      * @return 状态码
      */
-    int addCatFromTemp(int id);
+    int addCatFromTemp(long id);
 
     /**
      * 添加新猫咪
@@ -62,7 +62,7 @@ public interface CatService {
      * @param isTmp 是否临时表
      * @return 状态码
      */
-    int deleteCatById(int id, boolean isTmp);
+    int deleteCatById(long id, boolean isTmp);
 
     /**
      * 更新猫咪信息

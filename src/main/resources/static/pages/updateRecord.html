@@ -44,15 +44,17 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            ready: 0,
-            id: (window.location.href.split('id=')[1]).split('&')[0],
-            type: window.location.href.split('type=')[1],
-            record: {},
-            cats: {},
-            locations: {},
-            locationL: '',
-            timeL: ''
+        data() {
+            return {
+                ready: 0,
+                id: (window.location.href.split('id=')[1]).split('&')[0],
+                type: window.location.href.split('type=')[1],
+                record: {},
+                cats: {},
+                locations: {},
+                locationL: '',
+                timeL: ''
+            };
         },
         async mounted() {
             if (this.type === 'feeding') {

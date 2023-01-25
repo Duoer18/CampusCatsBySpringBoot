@@ -41,7 +41,7 @@ public class AdminController {
      * @return 状态码
      */
     @GetMapping("/cats/{id}")
-    public Result addCatCheckPass(@PathVariable int id) {
+    public Result addCatCheckPass(@PathVariable long id) {
         int status = catService.addCatFromTemp(id);
         int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = status == 1 ? "" : "添加猫咪失败！";
@@ -55,7 +55,7 @@ public class AdminController {
      * @return 状态码
      */
     @DeleteMapping("/cats/{id}")
-    public Result deleteCat(@PathVariable int id) {
+    public Result deleteCat(@PathVariable long id) {
         int status = catService.deleteCatById(id, false);
         int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         String msg = status == 1 ? "" : "删除猫咪失败！";
@@ -69,7 +69,7 @@ public class AdminController {
      * @return 状态码
      */
     @DeleteMapping("/cats/tmp/{id}")
-    public Result addCatCheckReject(@PathVariable int id) {
+    public Result addCatCheckReject(@PathVariable long id) {
         int status = catService.deleteCatById(id, true);
         int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         String msg = status == 1 ? "" : "删除猫咪失败！";
@@ -110,7 +110,7 @@ public class AdminController {
      * @return 状态码
      */
     @GetMapping("/records/{type}/{id}")
-    public Result addRecordCheckPass(@PathVariable int id, @PathVariable String type) {
+    public Result addRecordCheckPass(@PathVariable long id, @PathVariable String type) {
         int status = recordService.addRecordCheckPass(id, type);
         int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = status == 1 ? "" : "添加记录失败！";
@@ -124,7 +124,7 @@ public class AdminController {
      * @return 状态码
      */
     @DeleteMapping("/records/{type}/{id}")
-    public Result addRecordCheckReject(@PathVariable int id, @PathVariable String type) {
+    public Result addRecordCheckReject(@PathVariable long id, @PathVariable String type) {
         int status = recordService.deleteTempRecord(Collections.singletonList(id), type);
         int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         String msg = status == 1 ? "" : "删除记录失败！";

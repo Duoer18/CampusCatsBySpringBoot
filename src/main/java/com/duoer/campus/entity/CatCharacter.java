@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class CatCharacter {
     @TableId(type = IdType.AUTO)
-    private Integer characterId;
+    private Long characterId;
     private String catCharacter;
 }

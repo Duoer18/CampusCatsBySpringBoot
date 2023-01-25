@@ -57,7 +57,7 @@ public class CatController {
      * @return 猫咪对象
      */
     @GetMapping("/{id}")
-    public Result getCatById(@PathVariable int id) {
+    public Result getCatById(@PathVariable long id) {
         CatDTO cat = catService.getCatById(id, false);
         int code = cat != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = cat != null ? "" : "猫咪数据查询失败！";

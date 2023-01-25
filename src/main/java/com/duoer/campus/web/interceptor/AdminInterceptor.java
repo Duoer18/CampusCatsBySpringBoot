@@ -22,7 +22,11 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
-        return isAdmin != null ? isAdmin : false;
+        isAdmin = isAdmin != null ? isAdmin : false;
+        if (!isAdmin) {
+            response.sendRedirect("/CampusCats4U/home");
+        }
+        return isAdmin;
     }
 
     @Override

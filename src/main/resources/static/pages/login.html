@@ -44,14 +44,16 @@
 <script>
     new Vue({
         el: '#loginDiv',
-        data: {
-            formData: {
-                username: '',
-                password: ''
-            },
-            user: {},
-            remember: '',
-            status: {}
+        data() {
+            return {
+                formData: {
+                    username: '',
+                    password: ''
+                },
+                user: {},
+                remember: '',
+                status: {}
+            };
         },
         async mounted() {
             let u = (await myAxios.get("/users")).data;

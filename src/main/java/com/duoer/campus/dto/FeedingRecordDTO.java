@@ -8,11 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 public class FeedingRecordDTO extends RecordDTO {
     private String remarks;
-    private Integer formerId;
+    private Long formerId;
 
-    public FeedingRecordDTO(Integer recordId, Integer catId, String catName,
-                            String username, Integer locationId, String location,
-                            String recordTime, String lastUpdate, String remarks, Integer formerId) {
+    public FeedingRecordDTO(Long recordId, Long catId, String catName,
+                            String username, Long locationId, String location,
+                            String recordTime, String lastUpdate, String remarks, Long formerId) {
         super(recordId, catId, catName, username, locationId, location, recordTime, lastUpdate);
         this.remarks = remarks;
         this.formerId = formerId;

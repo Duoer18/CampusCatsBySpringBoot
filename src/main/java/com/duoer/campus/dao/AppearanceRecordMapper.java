@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface AppearanceRecordMapper extends BaseMapper<AppearanceRecord> {
-    int deleteAppearanceRecordsByIds(@Param("ids") int[] ids,
+    int deleteAppearanceRecordsByIds(@Param("ids") long[] ids,
                                   @Param("username") String username,
                                   @Param("isAdmin") Boolean isAdmin);
 }

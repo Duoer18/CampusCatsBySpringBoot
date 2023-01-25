@@ -43,8 +43,10 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            user: {}
+        data() {
+            return {
+                user: {}
+            };
         },
         async mounted() {
             this.user = await userMsg(" 的空间");

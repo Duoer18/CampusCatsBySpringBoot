@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @SpringBootTest
 @Transactional
@@ -30,8 +29,8 @@ class CampusCatsWithMpApplicationTests {
     private AppearanceRecordMapper appearanceRecordMapper;
 
     @Test
-    void contextLoads() {
-
+    void contextLoads() throws UnknownHostException {
+        System.out.println(InetAddress.getLocalHost().getHostAddress());
     }
 
     @Test
@@ -46,8 +45,8 @@ class CampusCatsWithMpApplicationTests {
     @Test
     void updRecord() {
         FeedingRecord fr = new FeedingRecord();
-        fr.setRecordId(1);
-        fr.setLocationId(1);
+        fr.setRecordId(1L);
+        fr.setLocationId(1L);
         recordService.updateRecord(fr);
     }
 
@@ -64,18 +63,18 @@ class CampusCatsWithMpApplicationTests {
     @Test
     void addCatPass() {
 //        catService.addCatFromTemp(10);
-        System.out.println(catService.deleteCatById(100, true));
+        System.out.println(catService.deleteCatById(100L, true));
     }
 
     @Test
     void delRecordTemp() {
 //        appearanceRecordTempMapper.deleteBatchIds();
 //        AppearanceRecordTemp appearanceRecordTemp = new AppearanceRecordTemp();
-//        appearanceRecordTemp.setRecordId(2);
-//        appearanceRecordTemp.setFormerId(-1);
+//        appearanceRecordTemp.setRecordId(2L);
+//        appearanceRecordTemp.setFormerId(-1L);
 //        appearanceRecordTemp.setVersion(0);
 //        System.out.println(appearanceRecordTempMapper.updateById(appearanceRecordTemp));
-        AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(7);
+        AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(7L);
         appearanceRecordMapper.insert(ar);
     }
 }

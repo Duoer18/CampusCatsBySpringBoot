@@ -87,11 +87,13 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            user: {},
-            typeDef: window.location.href.split('=')[1] === 'feeding',
-            feedings: {},
-            appearances: {}
+        data() {
+            return {
+                user: {},
+                typeDef: window.location.href.split('=')[1] === 'feeding',
+                feedings: {},
+                appearances: {}
+            };
         },
         async mounted() {
             this.user = await userMsg("");

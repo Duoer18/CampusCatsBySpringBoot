@@ -104,10 +104,12 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            user: {},
-            feedings: {},
-            appearances: {}
+        data() {
+            return {
+                user: {},
+                feedings: {},
+                appearances: {}
+            };
         },
         async mounted() {
             this.user = await userMsg(" 的全部记录");
@@ -130,8 +132,10 @@
             upd(recordType, id) {
                 location.href = '/CampusCats/updateRecord?id=' + id + '&type=' + recordType;
             },
-            async del(recordType, id) {
-                if (Number.isInteger(id)) {
+            async del(recordType, id, ids) {
+                if (id === "") {
+                    id = ids;
+                } else {
                     id = [id];
                 }
                 let del = (await myAxios.delete('/' + recordType + 's', {data:id})).data;
@@ -151,7 +155,7 @@
                 }
 
                 if (ids.length !== 0) {
-                    this.del(recordType, ids);
+                    this.del(recordType, "", ids);
                 } else {
                     alert("您还未选择任何记录！");
                 }

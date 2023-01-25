@@ -28,12 +28,14 @@
 <script>
     new Vue({
         el: '#loginDiv',
-        data: {
-            formData: {
-                username: '',
-                password: ''
-            },
-            status: {}
+        data() {
+            return {
+                formData: {
+                    username: '',
+                    password: ''
+                },
+                status: {}
+            };
         },
         methods: {
             async check() {

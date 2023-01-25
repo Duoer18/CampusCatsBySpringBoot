@@ -50,7 +50,7 @@ public class CatServiceImpl implements CatService {
      * @return 猫咪对象
      */
     @Override
-    public CatDTO getCatById(int id, boolean isTmp) {
+    public CatDTO getCatById(long id, boolean isTmp) {
         Cat cat = isTmp ? catTempMapper.selectById(id) : catMapper.selectById(id);
         return catDTOWrapper.wrapCat(cat);
     }
@@ -86,7 +86,7 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int addCatFromTemp(int id) {
+    public int addCatFromTemp(long id) {
         /*synchronized (CatLock.get(id)) {
             Cat catTemp = catTempMapper.selectById(id);
             if (catTemp != null) {
@@ -98,6 +98,7 @@ public class CatServiceImpl implements CatService {
             }
         }*/
         CatTemp catTemp = catTempMapper.selectById(id);
+        System.out.println(catTemp);
         if (catTemp != null && catTempMapper.updateById(catTemp) == 1) {
             catTempMapper.deleteById(id);
             catTemp.setCatId(null);
@@ -126,7 +127,7 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int deleteCatById(int id, boolean isTmp) {
+    public int deleteCatById(long id, boolean isTmp) {
         return isTmp ? catTempMapper.deleteById(id) : catMapper.deleteById(id);
     }
 

@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class RecordDTO {
-    private Integer recordId;
-    private Integer catId;
+    private Long recordId;
+    private Long catId;
     private String catName;
     private String username;
-    private Integer locationId;
+    private Long locationId;
     private String location;
     private String recordTime;
     private String lastUpdate;

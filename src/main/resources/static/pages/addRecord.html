@@ -43,24 +43,19 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            ready: 0,
-            type: window.location.href.split('type=')[1],
-            catIdParam: '-1',
-            cats: {},
-            locationL: '',
-            locations: {},
-            timeL: '',
-            formData: {
-                catId: 1,
-                locationId: 1
-            }
+        data() {
+            return {
+                ready: 0,
+                type: window.location.href.split('type=')[1],
+                catIdParam: '-1',
+                cats: {},
+                locationL: '',
+                locations: {},
+                timeL: '',
+                formData: {}
+            };
         },
         mounted: async function() {
-            if (this.type.includes('&catId=')) {
-                this.type = this.type.split('&')[0];
-                this.formData.catId = Number(this.catIdParam = window.location.href.split('catId=')[1]);
-            }
             if (this.type === 'feeding') {
                 this.locationL = '投喂位置';
                 this.timeL = '投喂时间';
@@ -76,11 +71,17 @@
                 alert("错误：" + this.cats.msg + "\n错误代码：" + this.cats.code);
             }
             this.ready++;
+            this.formData.catId = this.cats.data[0].catId;
+            if (this.type.includes('&catId=')) {
+                this.type = this.type.split('&')[0];
+                this.formData.catId = this.catIdParam = window.location.href.split('catId=')[1];
+            }
             this.locations = (await myAxios.get('/locations')).data;
             if (this.locations.code !== 20021) {
                 alert("错误：" + this.locations.msg + "\n错误代码：" + this.locations.code);
             }
             this.ready++;
+            this.formData.locationId = this.locations.data[0].locationId;
             document.getElementById('catIds').disabled = this.catIdParam !== '-1';
         },
         methods: {

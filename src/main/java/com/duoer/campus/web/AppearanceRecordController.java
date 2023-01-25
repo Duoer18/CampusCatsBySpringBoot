@@ -62,7 +62,7 @@ public class AppearanceRecordController {
         isAdmin = isAdmin != null ? isAdmin : false;
         int status = isAdmin ?
                 recordService.addRecord(ar) :
-                recordService.addTempRecord(new AppearanceRecordTemp(ar, -1));
+                recordService.addTempRecord(new AppearanceRecordTemp(ar, -1L));
         int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = status == 1 ? "" : "添加记录失败！";
         return new Result(code, status, msg);
@@ -75,7 +75,7 @@ public class AppearanceRecordController {
      * @return 所有记录集合
      */
     @GetMapping("/cat/{id}")
-    public Result catRecords(@PathVariable int id) {
+    public Result catRecords(@PathVariable long id) {
         List<? extends RecordDTO> records = recordService.getCatOwnRecords(id, "appearance");
         int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = records != null ? "" : "记录数据查询失败！";
@@ -89,7 +89,7 @@ public class AppearanceRecordController {
      * @return 状态码
      */
     @DeleteMapping
-    public Result deleteRecord(@RequestBody int[] ids, HttpSession session) {
+    public Result deleteRecord(@RequestBody long[] ids, HttpSession session) {
         System.out.println(Arrays.toString(ids));
         String username = (String) session.getAttribute("username");
         username = username != null ? username : "";
@@ -132,7 +132,7 @@ public class AppearanceRecordController {
      * @return 该记录对象
      */
     @GetMapping("/{id}")
-    public Result PreUpdateRecord(@PathVariable int id) {
+    public Result PreUpdateRecord(@PathVariable long id) {
         RecordDTO record = recordService.getRecordById(id, "appearance");
         int code = record != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = record != null ? "" : "记录数据查询失败！";

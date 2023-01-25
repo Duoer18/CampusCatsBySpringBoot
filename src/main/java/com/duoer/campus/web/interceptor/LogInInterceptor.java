@@ -26,7 +26,11 @@ public class LogInInterceptor implements HandlerInterceptor {
             return true;
         } else {
             HttpSession session = request.getSession();
-            return session.getAttribute("username") != null;
+            boolean signed = session.getAttribute("username") != null;
+            if (!signed) {
+                response.sendRedirect("/CampusCats4U/login");
+            }
+            return signed;
         }
     }
 

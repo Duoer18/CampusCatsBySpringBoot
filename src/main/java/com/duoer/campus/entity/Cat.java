@@ -1,6 +1,5 @@
 package com.duoer.campus.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cat {
-    @TableId(type = IdType.AUTO)
-    private Integer catId;
+    @TableId
+    private Long catId;
     private String catName;
-    private Integer categoryId;
-    private Integer colorId;
-    private Integer characterId;
-    private Integer locationId;
+    private Long categoryId;
+    private Long colorId;
+    private Long characterId;
+    private Long locationId;
     private Integer recordCount;
 }

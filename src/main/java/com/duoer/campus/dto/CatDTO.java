@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CatDTO {
-    private Integer catId;
+    private Long catId;
     private String catName;
-    private Integer categoryId;
+    private Long categoryId;
     private String category;
-    private Integer colorId;
+    private Long colorId;
     private String color;
-    private Integer characterId;
+    private Long characterId;
     private String character;
-    private Integer locationId;
+    private Long locationId;
     private String location;
     private Integer recordCount;
     private String username;

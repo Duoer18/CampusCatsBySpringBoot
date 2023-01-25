@@ -9,8 +9,8 @@ import lombok.*;
 public class FeedingRecord extends MyRecord {
     private String remarks;
 
-    public FeedingRecord(Integer recordId, Integer catId, String username,
-                         Integer locationId, String recordTime, String lastUpdate, String remarks) {
+    public FeedingRecord(Long recordId, Long catId, String username,
+                         Long locationId, String recordTime, String lastUpdate, String remarks) {
         super(recordId, catId, username, locationId, recordTime, lastUpdate);
         this.remarks = remarks;
     }

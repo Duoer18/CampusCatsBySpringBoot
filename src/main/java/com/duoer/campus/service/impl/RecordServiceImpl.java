@@ -128,7 +128,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 记录
      */
     @Override
-    public RecordDTO getRecordById(int id, String type) {
+    public RecordDTO getRecordById(long id, String type) {
         if (type.equals("feeding")) {
             FeedingRecord fr = feedingRecordMapper.selectById(id);
             return recordDTOWrapper.wrapFeeding(fr);
@@ -148,7 +148,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 记录
      */
     @Override
-    public RecordDTO getTempRecordById(int id, String type) {
+    public RecordDTO getTempRecordById(long id, String type) {
         if (type.equals("feeding")) {
             FeedingRecordTemp fr = feedingRecordTempMapper.selectById(id);
             return recordDTOWrapper.wrapFeeding(fr);
@@ -169,7 +169,7 @@ public class RecordServiceImpl implements RecordService {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public List<? extends RecordDTO> getCatOwnRecords(int id, String type) {
+    public List<? extends RecordDTO> getCatOwnRecords(long id, String type) {
         if (type.equals("feeding")) {
             LambdaQueryWrapper<FeedingRecord> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(FeedingRecord::getCatId, id);
@@ -191,14 +191,11 @@ public class RecordServiceImpl implements RecordService {
      */
     @Override
     public int addRecord(MyRecord r) {
+        r.setLastUpdate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         if (r instanceof FeedingRecord) {
-            FeedingRecord fr = (FeedingRecord) r;
-            fr.setLastUpdate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            return feedingRecordMapper.insert(fr);
+            return feedingRecordMapper.insert((FeedingRecord) r);
         } else if (r instanceof AppearanceRecord){
-            AppearanceRecord ar = (AppearanceRecord) r;
-            ar.setLastUpdate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            return appearanceRecordMapper.insert(ar);
+            return appearanceRecordMapper.insert((AppearanceRecord) r);
         } else {
             throw new BusinessException(ResponseCode.BUS_ERR.getCode(), "请给出正确的参数");
         }
@@ -231,7 +228,7 @@ public class RecordServiceImpl implements RecordService {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public int addRecordCheckPass(int id, String type) {
+    public int addRecordCheckPass(long id, String type) {
         if (type.equals("feeding")) {
             FeedingRecordTemp fr = feedingRecordTempMapper.selectById(id);
             if (fr != null && feedingRecordTempMapper.myDeleteById(id, fr.getVersion()) == 1) {
@@ -301,7 +298,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 状态码
      */
     @Override
-    public int deleteRecord(int[] ids, String type, String username, Boolean isAdmin) {
+    public int deleteRecord(long[] ids, String type, String username, Boolean isAdmin) {
         if (type.equals("feeding")) {
             return feedingRecordMapper.deleteFeedingRecordsByIds(ids, username, isAdmin);
         } else if (type.equals("appearance")) {
@@ -319,7 +316,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 状态码
      */
     @Override
-    public int deleteTempRecord(List<Integer> ids, String type) {
+    public int deleteTempRecord(List<Long> ids, String type) {
         if (type.equals("feeding")) {
             return feedingRecordTempMapper.deleteBatchIds(ids);
         } else if (type.equals("appearance")) {

@@ -1,10 +1,13 @@
 package com.duoer.campus.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 @Data
 public class User {
+    @TableId
+    private Long id;
     private String username;
     @TableField(select = false)
     private String password;

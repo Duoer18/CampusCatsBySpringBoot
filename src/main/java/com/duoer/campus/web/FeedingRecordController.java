@@ -54,12 +54,14 @@ public class FeedingRecordController {
      */
     @PostMapping
     public Result addRecord(@RequestBody FeedingRecord fr, HttpSession session) {
+        System.out.println(fr);
+        fr.setRecordId(null);
         fr.setUsername((String) session.getAttribute("username"));
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         isAdmin = isAdmin != null ? isAdmin : false;
         int status = isAdmin ?
                 recordService.addRecord(fr) :
-                recordService.addTempRecord(new FeedingRecordTemp(fr, -1));
+                recordService.addTempRecord(new FeedingRecordTemp(fr, -1L));
         int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = status == 1 ? "" : "添加记录失败！";
         return new Result(code, status, msg);
@@ -72,7 +74,7 @@ public class FeedingRecordController {
      * @return 所有记录集合
      */
     @GetMapping("/cat/{id}")
-    public Result catRecords(@PathVariable int id) {
+    public Result catRecords(@PathVariable long id) {
         List<? extends RecordDTO> records = recordService.getCatOwnRecords(id, "feeding");
         int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = records != null ? "" : "记录数据查询失败！";
@@ -86,7 +88,7 @@ public class FeedingRecordController {
      * @return 状态码
      */
     @DeleteMapping
-    public Result deleteRecord(@RequestBody int[] ids, HttpSession session) {
+    public Result deleteRecord(@RequestBody long[] ids, HttpSession session) {
         System.out.println(Arrays.toString(ids));
         String username = (String) session.getAttribute("username");
         username = username != null ? username : "";
@@ -129,7 +131,7 @@ public class FeedingRecordController {
      * @return 该记录对象
      */
     @GetMapping("/{id}")
-    public Result PreUpdateRecord(@PathVariable int id) {
+    public Result PreUpdateRecord(@PathVariable long id) {
         RecordDTO record = recordService.getRecordById(id, "feeding");
         int code = record != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = record != null ? "" : "记录数据查询失败！";

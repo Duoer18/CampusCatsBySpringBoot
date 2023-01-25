@@ -48,23 +48,25 @@
 <script>
     new Vue({
         el: '#app',
-        data: {
-            ready: 0,
-            categories: {},
-            colors: {},
-            characters: {},
-            locations: {},
-            formData: {
-                categoryId: 1,
-                colorId: 1,
-                characterId: 1,
-                locationId: 1
-            },
-            catName: '',
-            category: 1,
-            color: 1,
-            character: 1,
-            location: 1
+        data() {
+            return {
+                ready: 0,
+                categories: {},
+                colors: {},
+                characters: {},
+                locations: {},
+                formData: {
+                    categoryId: 1,
+                    colorId: 1,
+                    characterId: 1,
+                    locationId: 1
+                },
+                catName: '',
+                category: 1,
+                color: 1,
+                character: 1,
+                location: 1
+            };
         },
         async mounted() {
             await userMsg('');
@@ -85,6 +87,12 @@
                 alert("错误：" + this.locations.msg + "\n错误代码：" + this.locations.code);
             }
             this.ready += 4;
+            this.formData = {
+                categoryId: this.categories.data[0].categoryId,
+                colorId: this.colors.data[0].colorId,
+                characterId: this.characters.data[0].characterId,
+                locationId: this.locations.data[0].locationId
+            }
         },
         methods: {
             async submit() {

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface FeedingRecordMapper extends BaseMapper<FeedingRecord> {
-    int deleteFeedingRecordsByIds(@Param("ids") int[] ids,
+    int deleteFeedingRecordsByIds(@Param("ids") long[] ids,
                                   @Param("username") String username,
                                   @Param("isAdmin") Boolean isAdmin);
 }
