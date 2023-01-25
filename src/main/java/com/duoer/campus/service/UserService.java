@@ -16,7 +16,7 @@ public interface UserService {
      * @param u 用户对象
      * @return 状态码
      */
-    int loginCheck(User u);
+    User loginCheck(User u);
 
     /**
      * 注册

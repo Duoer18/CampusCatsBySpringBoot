@@ -19,16 +19,11 @@ public class UserServiceImpl implements UserService {
      * @return 状态码
      */
     @Override
-    public int loginCheck(User u) {
+    public User loginCheck(User u) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, u.getUsername())
                 .eq(User::getPassword, u.getPassword());
-        User userSelected = userMapper.selectOne(wrapper);
-        if (userSelected == null) { // 账号或密码错误
-            return -1;
-        } else { // 用户状态正常
-            return userSelected.getStatus();
-        }
+        return userMapper.selectOne(wrapper);
     }
 
     /**

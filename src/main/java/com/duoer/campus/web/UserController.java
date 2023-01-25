@@ -2,8 +2,11 @@ package com.duoer.campus.web;
 
 import com.duoer.campus.entity.User;
 import com.duoer.campus.service.UserService;
+import com.duoer.campus.utils.JwtUtils;
 import com.duoer.campus.web.format.ResponseCode;
 import com.duoer.campus.web.format.Result;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * 用户登录检查
@@ -24,7 +29,7 @@ public class UserController {
      * @return 状态
      */
     @RequestMapping("/login")
-    public Result login(@RequestBody User u, HttpSession session, HttpServletResponse response) {
+    public Result login(@RequestBody User u, HttpSession session, HttpServletResponse response) throws JsonProcessingException {
         // 响应代码值
         int code;
         // 仅用于登录时检查用户名和密码是否正确输入，作为响应内容时实际无用处
@@ -36,10 +41,16 @@ public class UserController {
         Object username;
         synchronized (UserController.class) {
             if ((username = session.getAttribute("username")) == null) { // 若为空，则允许登录
-                status = userService.loginCheck(u);
-                if (status > 0) {
+                User userSelected = userService.loginCheck(u);
+                if (userSelected != null) {
+                    String json = objectMapper.writeValueAsString(userSelected);
+                    User userJSON = objectMapper.readValue(json, User.class);
+                    System.out.println(userJSON);
+                    String jwt = JwtUtils.createJWT(json);
+                    System.out.println(jwt);
+
                     session.setAttribute("username", u.getUsername());
-                    session.setAttribute("isAdmin", status == 2 ? true : null);
+                    session.setAttribute("isAdmin", userSelected.getStatus() == 2 ? true : null);
                     code = ResponseCode.LOG_SUC.getCode();
                     if (u.getStatus() == -11) {
                         Cookie usernameCookie = new Cookie("username", u.getUsername());
