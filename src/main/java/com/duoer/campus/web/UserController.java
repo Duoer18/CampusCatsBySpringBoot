@@ -8,17 +8,21 @@ import com.duoer.campus.response.ResponseCode;
 import com.duoer.campus.response.Result;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 用户登录检查
@@ -43,6 +47,7 @@ public class UserController {
             System.out.println(userJSON);
             String jwt = JwtUtils.createJWT(json);
             System.out.println(jwt);
+            redisTemplate.opsForValue().set("user_token_" + jwt, json, 60, TimeUnit.MINUTES);
 
 //                    session.setAttribute("username", u.getUsername());
 //                    session.setAttribute("isAdmin", userSelected.getStatus() == 2 ? true : null);
@@ -99,6 +104,14 @@ public class UserController {
 //                return new Result(code, status, msg);
 //            }
 
+    }
+
+    @RequestMapping("/logout")
+    public Result logout(@RequestHeader(name = "token", required = false, defaultValue = "") String token) {
+        if (StringUtils.isNotEmpty(token)) {
+            redisTemplate.delete("user_token_" + token);
+        }
+        return new Result(ResponseCode.LOG_SUC.getCode(), "logout");
     }
 
     @RequestMapping("/acc")

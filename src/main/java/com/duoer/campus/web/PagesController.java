@@ -15,7 +15,7 @@ public class PagesController {
      *
      * @return 状态
      */
-    @RequestMapping("/logout")
+    @RequestMapping("/logout_")
     public String logout() {
         return "redirect:/login";
     }

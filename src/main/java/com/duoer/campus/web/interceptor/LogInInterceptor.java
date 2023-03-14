@@ -6,6 +6,8 @@ import com.duoer.campus.entity.User;
 import com.duoer.campus.utils.JwtUtils;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class LogInInterceptor implements HandlerInterceptor {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     /**
      * 首先获取请求方式，若为get且不以user结尾，则直接放行；
      * 否则，获取当前session，若其username属性为空，则拦截
@@ -37,6 +42,12 @@ public class LogInInterceptor implements HandlerInterceptor {
             if (StringUtils.isEmpty(userJSON)) {
                 throw new JwtException("not login");
             }
+
+            userJSON = redisTemplate.opsForValue().get("user_token_" + token);
+            if (StringUtils.isEmpty(userJSON)) {
+                throw new JwtException("not login");
+            }
+
             User user = JSON.parseObject(userJSON, User.class);
 //            HttpSession session = request.getSession();
 //            boolean signed = session.getAttribute("username") != null;

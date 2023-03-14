@@ -6,6 +6,8 @@ import com.duoer.campus.entity.User;
 import com.duoer.campus.utils.JwtUtils;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     /**
      * 获取当前的session，若其isAdmin属性为false或null，则拦截
      */
@@ -28,12 +33,17 @@ public class AdminInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
         System.out.println(token);
 
-        String userJOSN = JwtUtils.parseJWT(token);
-        if (StringUtils.isEmpty(userJOSN)) {
+        String userJSON = JwtUtils.parseJWT(token);
+        if (StringUtils.isEmpty(userJSON)) {
             throw new JwtException("not admin");
         }
 
-        User user = JSON.parseObject(userJOSN, User.class);
+        userJSON = redisTemplate.opsForValue().get("user_token_" + token);
+        if (StringUtils.isEmpty(userJSON)) {
+            throw new JwtException("not login");
+        }
+
+        User user = JSON.parseObject(userJSON, User.class);
         if (user == null || !user.getIsAdmin()) {
             throw new JwtException("not admin");
         }

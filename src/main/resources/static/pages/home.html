@@ -53,8 +53,9 @@
         },
         methods: {
             async logout() {
+                await myAxios.get("/users/logout");
                 localStorage.removeItem("token");
-                location.href = '/CampusCats/logout';
+                location.href = '/CampusCats/login';
             }
         }
     });
