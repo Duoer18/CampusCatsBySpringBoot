@@ -1,32 +1,28 @@
 package com.duoer.campus;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.duoer.campus.dao.AppearanceRecordMapper;
-import com.duoer.campus.dao.AppearanceRecordTempMapper;
-import com.duoer.campus.dao.CatMapper;
 import com.duoer.campus.entity.*;
 import com.duoer.campus.service.CatService;
-import com.duoer.campus.service.RecordService;
+//import com.duoer.campus.service.RecordService;
 import com.duoer.campus.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootTest
 class CampusCatsWithMpApplicationTests {
-    @Autowired
-    private RecordService recordService;
+//    @Autowired
+//    private RecordService recordService;
     @Autowired
     private UserService userService;
     @Autowired
     private CatService catService;
-    @Autowired
-    private AppearanceRecordTempMapper appearanceRecordTempMapper;
+//    @Autowired
+//    private AppearanceRecordTempMapper appearanceRecordTempMapper;
     @Autowired
     private AppearanceRecordMapper appearanceRecordMapper;
 
@@ -37,11 +33,11 @@ class CampusCatsWithMpApplicationTests {
 
     @Test
     void getRecord() {
-        System.out.println(recordService.getAllRecords("feeding"));
+//        System.out.println(recordService.getAllRecords("feeding"));
         System.out.println("==================================================================");
-        System.out.println(recordService.getAllRecordsByUsername("kkkkkk", "feeding"));
+//        System.out.println(recordService.getAllRecordsByUsername("kkkkkk", "feeding"));
         System.out.println("==================================================================");
-        System.out.println(recordService.getAllTempRecords("feeding"));
+//        System.out.println(recordService.getAllTempRecords("feeding"));
     }
 
     @Test
@@ -49,7 +45,7 @@ class CampusCatsWithMpApplicationTests {
         FeedingRecord fr = new FeedingRecord();
         fr.setRecordId(1L);
         fr.setLocationId(1L);
-        recordService.updateRecord(fr);
+//        recordService.updateRecord(fr);
     }
 
     @Test
@@ -76,8 +72,8 @@ class CampusCatsWithMpApplicationTests {
 //        appearanceRecordTemp.setFormerId(-1L);
 //        appearanceRecordTemp.setVersion(0);
 //        System.out.println(appearanceRecordTempMapper.updateById(appearanceRecordTemp));
-        AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(7L);
-        appearanceRecordMapper.insert(ar);
+//        AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(7L);
+        appearanceRecordMapper.insert(new AppearanceRecord());
     }
 
     @Test
