@@ -64,19 +64,4 @@ public class PagesController {
     public String addCat() {
         return "forward:/pages/addCat.html";
     }
-
-    @RequestMapping("/adminRecords")
-    public String adminRecords() {
-        return "forward:/pages/admin/adminRecordsCheck.html";
-    }
-
-    @RequestMapping("/adminCats")
-    public String adminCats() {
-        return "forward:/pages/admin/adminCatsCheck.html";
-    }
-
-    @RequestMapping("/adminUpdateCat")
-    public String adminUpdateCat() {
-        return "forward:/pages/admin/adminUpdateCat.html";
-    }
 }

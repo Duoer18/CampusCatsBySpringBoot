@@ -27,7 +27,7 @@ public class AppearanceRecordController {
      */
     @GetMapping
     public Result getAllRecords() {
-        List<AppearanceRecordDTO> records = appearanceRecordService.getAllRecords(false);
+        List<AppearanceRecordDTO> records = appearanceRecordService.getAllRecords();
         return ResultGenerator.getResult(records);
     }
 
@@ -59,10 +59,8 @@ public class AppearanceRecordController {
     public Result addRecord(@RequestBody AppearanceRecord ar) {
         User user = BaseContext.get();
         String username =user.getUsername();
-        Boolean isAdmin = user.getIsAdmin();
         ar.setUsername(username);
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean saved = appearanceRecordService.addRecord(ar, !isAdmin);
+        boolean saved = appearanceRecordService.save(ar);
         int code = saved ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = saved ? "" : "添加记录失败！";
         return new Result(code, saved, msg);
@@ -91,10 +89,8 @@ public class AppearanceRecordController {
         System.out.println(Arrays.toString(ids));
         User user = BaseContext.get();
         String username =user.getUsername();
-        Boolean isAdmin = user.getIsAdmin();
         username = username != null ? username : "";
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean deleted = appearanceRecordService.deleteRecord(ids, username, isAdmin);
+        boolean deleted = appearanceRecordService.deleteRecord(ids, username);
         int code = deleted ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         String msg = deleted ? "" : "删除记录失败！";
         return new Result(code, deleted, msg);
@@ -110,11 +106,9 @@ public class AppearanceRecordController {
     public Result updateRecord(@RequestBody AppearanceRecord ar) {
         User user = BaseContext.get();
         String username =user.getUsername();
-        Boolean isAdmin = user.getIsAdmin();
         ar.setUsername(username);
 
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean updated = appearanceRecordService.updateRecord(ar, !isAdmin);
+        boolean updated = appearanceRecordService.updateRecord(ar);
 
         int code = updated ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
         String msg = updated ? "" : "更新记录失败！";
@@ -129,7 +123,8 @@ public class AppearanceRecordController {
      */
     @GetMapping("/{id}")
     public Result PreUpdateRecord(@PathVariable long id) {
-        AppearanceRecordDTO record = appearanceRecordService.getRecordById(id, false);
+        System.out.println("get feeding id=" + id);
+        AppearanceRecordDTO record = appearanceRecordService.getRecordById(id);
         int code = record != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = record != null ? "" : "记录数据查询失败！";
         return new Result(code, record, msg);

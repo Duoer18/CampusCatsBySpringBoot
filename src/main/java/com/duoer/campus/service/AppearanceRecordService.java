@@ -12,7 +12,7 @@ public interface AppearanceRecordService extends IService<AppearanceRecord> {
      *
      * @return 所有记录集合
      */
-    List<AppearanceRecordDTO> getAllRecords(boolean isTmp);
+    List<AppearanceRecordDTO> getAllRecords();
 
     /**
      * 获取某用户所有记录
@@ -28,7 +28,7 @@ public interface AppearanceRecordService extends IService<AppearanceRecord> {
      * @param id   编号
      * @return 记录
      */
-    AppearanceRecordDTO getRecordById(long id, boolean isTmp);
+    AppearanceRecordDTO getRecordById(long id);
 
     /**
      * 获取某猫咪所有记录
@@ -39,44 +39,19 @@ public interface AppearanceRecordService extends IService<AppearanceRecord> {
     List<AppearanceRecordDTO> getCatOwnRecords(long id);
 
     /**
-     * 添加新记录
-     *
-     * @param ar 记录对象
-     * @return 状态码
-     */
-    boolean addRecord(AppearanceRecord ar, boolean isTmp);
-
-    /**
-     * 记录审核通过
-     *
-     * @param id   临时表id
-     * @return 状态码
-     */
-    boolean addRecordCheckPass(long id);
-
-    /**
-     * 记录审核不通过
-     *
-     * @param id   临时表id
-     * @return 状态码
-     */
-    boolean addRecordReject(long id);
-
-    /**
      * 修改某记录
      *
      * @param ar 记录对象
      * @return 状态码
      */
-    boolean updateRecord(AppearanceRecord ar, boolean isTmp);
+    boolean updateRecord(AppearanceRecord ar);
 
     /**
      * 删除某些记录
      *
      * @param ids  id数组
      * @param username 用户名
-     * @param isAdmin 是否管理员
      * @return 状态码
      */
-    boolean deleteRecord(long[] ids, String username, Boolean isAdmin);
+    boolean deleteRecord(long[] ids, String username);
 }

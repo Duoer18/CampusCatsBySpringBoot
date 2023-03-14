@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatService {
     @Autowired
-    private CatMapper catMapper;
-    @Autowired
     private CategoryMapper categoryMapper;
     @Autowired
     private CharacterMapper characterMapper;
@@ -48,17 +46,11 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
     /**
      * 获取所有猫咪
      *
-     * @param isTmp 是否临时表
      * @return 所有猫咪集合
      */
     @Override
-    public List<CatDTO> getAllCats(boolean isTmp) {
-        List<Cat> cats;
-        if (isTmp) {
-            cats = catMapper.getTmpCats();
-        } else {
-            cats = list();
-        }
+    public List<CatDTO> getAllCats() {
+        List<Cat> cats = list();
         return getDTOList(cats);
     }
 
@@ -66,17 +58,11 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
      * 按id查猫咪
      *
      * @param id    编号
-     * @param isTmp 是否临时表
      * @return 猫咪对象
      */
     @Override
-    public CatDTO getCatById(long id, boolean isTmp) {
-        Cat cat;
-        if (isTmp) {
-            cat = catMapper.getTmpCatById(id);
-        } else {
-            cat = getById(id);
-        }
+    public CatDTO getCatById(long id) {
+        Cat cat = getById(id);
         return getDTO(cat);
     }
 
@@ -101,50 +87,14 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
     }
 
     /**
-     * 从临时表中将猫咪添加到正式表
-     *
-     * @param id 编号
-     * @return 状态码
-     */
-    @Override
-    public boolean addCatPass(long id) {
-        Cat cat = new Cat();
-        cat.setCatId(id);
-        cat.setDeleted(0);
-        cat.setNeedCheck(0);
-        return catMapper.addCatPass(id);
-    }
-
-    /**
-     * 添加新猫咪
-     *
-     * @param c     猫咪对象
-     * @param isTmp 是否临时表
-     * @return 状态码
-     */
-    @Override
-    public boolean addCat(Cat c, boolean isTmp) {
-        if (isTmp) {
-            c.setNeedCheck(1);
-            c.setDeleted(1);
-        }
-        return save(c);
-    }
-
-    /**
      * 按id删除某猫咪
      *
      * @param id    编号
-     * @param isTmp 是否临时表
      * @return 状态码
      */
     @Override
-    public boolean deleteCatById(long id, boolean isTmp) {
-        if (isTmp) {
-            return catMapper.addCatReject(id);
-        } else {
-            return removeById(id);
-        }
+    public boolean deleteCatById(long id) {
+        return removeById(id);
     }
 
     /**

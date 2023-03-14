@@ -12,7 +12,7 @@ public interface FeedingRecordService extends IService<FeedingRecord> {
      *
      * @return 所有记录集合
      */
-    List<FeedingRecordDTO> getAllRecords(boolean isTmp);
+    List<FeedingRecordDTO> getAllRecords();
 
     /**
      * 获取某用户所有记录
@@ -28,7 +28,7 @@ public interface FeedingRecordService extends IService<FeedingRecord> {
      * @param id   编号
      * @return 记录
      */
-    FeedingRecordDTO getRecordById(long id, boolean isTmp);
+    FeedingRecordDTO getRecordById(long id);
 
     /**
      * 获取某猫咪所有记录
@@ -39,44 +39,19 @@ public interface FeedingRecordService extends IService<FeedingRecord> {
     List<FeedingRecordDTO> getCatOwnRecords(long id);
 
     /**
-     * 添加新记录
-     *
-     * @param fr 记录对象
-     * @return 状态码
-     */
-    boolean addRecord(FeedingRecord fr, boolean isTmp);
-
-    /**
-     * 记录审核通过
-     *
-     * @param id   临时表id
-     * @return 状态码
-     */
-    boolean addRecordCheckPass(long id);
-
-    /**
-     * 记录审核不通过
-     *
-     * @param id   临时表id
-     * @return 状态码
-     */
-    boolean addRecordReject(long id);
-
-    /**
      * 修改某记录
      *
      * @param fr 记录对象
      * @return 状态码
      */
-    boolean updateRecord(FeedingRecord fr, boolean isTmp);
+    boolean updateRecord(FeedingRecord fr);
 
     /**
      * 删除某些记录
      *
      * @param ids  id数组
      * @param username 用户名
-     * @param isAdmin 是否管理员
      * @return 状态码
      */
-    boolean deleteRecord(long[] ids, String username, Boolean isAdmin);
+    boolean deleteRecord(long[] ids, String username);
 }

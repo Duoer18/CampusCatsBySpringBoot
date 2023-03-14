@@ -61,7 +61,7 @@ class CampusCatsWithMpApplicationTests {
     @Test
     void addCatPass() {
 //        catService.addCatFromTemp(10);
-        System.out.println(catService.deleteCatById(100L, true));
+        System.out.println(catService.deleteCatById(100L));
     }
 
     @Test
@@ -87,7 +87,6 @@ class CampusCatsWithMpApplicationTests {
 
     @Test
     void catUpdate() {
-        catService.addCatPass(-1);
         LambdaQueryWrapper<Cat> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Cat::getDeleted, 1);
         System.out.println(catService.list(queryWrapper));

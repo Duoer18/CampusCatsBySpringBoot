@@ -42,13 +42,8 @@ public class AppearanceRecServiceImpl extends ServiceImpl<AppearanceRecordMapper
     }
 
     @Override
-    public List<AppearanceRecordDTO> getAllRecords(boolean isTmp) {
-        List<AppearanceRecord> appearanceRecords;
-        if (isTmp) {
-            appearanceRecords = appearanceRecordMapper.getTmpRecords();
-        } else {
-            appearanceRecords = list();
-        }
+    public List<AppearanceRecordDTO> getAllRecords() {
+        List<AppearanceRecord> appearanceRecords = list();
         return getDTOList(appearanceRecords);
     }
 
@@ -60,13 +55,8 @@ public class AppearanceRecServiceImpl extends ServiceImpl<AppearanceRecordMapper
     }
 
     @Override
-    public AppearanceRecordDTO getRecordById(long id, boolean isTmp) {
-        AppearanceRecord ar;
-        if (isTmp) {
-            ar = appearanceRecordMapper.getTmpRecordById(id);
-        } else {
-            ar = getById(id);
-        }
+    public AppearanceRecordDTO getRecordById(long id) {
+        AppearanceRecord ar = getById(id);
         return getDTO(ar);
     }
 
@@ -78,31 +68,8 @@ public class AppearanceRecServiceImpl extends ServiceImpl<AppearanceRecordMapper
     }
 
     @Override
-    public boolean addRecord(AppearanceRecord ar, boolean isTmp) {
-        if (isTmp) {
-            ar.setDeleted(1);
-            ar.setNeedCheck(1);
-        }
-        return save(ar);
-    }
-
-    @Override
-    public boolean addRecordCheckPass(long id) {
-        return appearanceRecordMapper.addRecordPass(id);
-    }
-
-    @Override
-    public boolean addRecordReject(long id) {
-        return appearanceRecordMapper.addRecordReject(id);
-    }
-
-    @Override
-    public boolean updateRecord(AppearanceRecord ar, boolean isTmp) {
+    public boolean updateRecord(AppearanceRecord ar) {
         LambdaUpdateWrapper<AppearanceRecord> updateWrapper = new LambdaUpdateWrapper<>();
-        if (isTmp) {
-            updateWrapper.set(AppearanceRecord::getDeleted, 1)
-                    .set(AppearanceRecord::getNeedCheck, 1);
-        }
         updateWrapper.set(null != ar.getCatId(), AppearanceRecord::getCatId, ar.getCatId())
                 .set(null != ar.getLocationId(), AppearanceRecord::getLocationId, ar.getLocationId())
                 .set(null != ar.getRecordTime(), AppearanceRecord::getRecordTime, ar.getRecordTime())
@@ -111,7 +78,7 @@ public class AppearanceRecServiceImpl extends ServiceImpl<AppearanceRecordMapper
     }
 
     @Override
-    public boolean deleteRecord(long[] ids, String username, Boolean isAdmin) {
-        return appearanceRecordMapper.deleteAppearanceRecordsByIds(ids, username, isAdmin);
+    public boolean deleteRecord(long[] ids, String username) {
+        return appearanceRecordMapper.deleteAppearanceRecordsByIds(ids, username);
     }
 }

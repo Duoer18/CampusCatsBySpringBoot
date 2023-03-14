@@ -1,9 +1,7 @@
 package com.duoer.campus.web;
 
-import com.duoer.campus.BaseContext;
 import com.duoer.campus.dto.CatDTO;
 import com.duoer.campus.entity.Cat;
-import com.duoer.campus.entity.User;
 import com.duoer.campus.service.CatService;
 import com.duoer.campus.response.ResponseCode;
 import com.duoer.campus.response.Result;
@@ -26,11 +24,8 @@ public class CatController {
      */
     @PostMapping
     public Result addCat(@RequestBody Cat c) {
-        // 若为管理员则直接完成添加，否则添加到临时表待审核
-        User user = BaseContext.get();
-        Boolean isAdmin = user.getIsAdmin();
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean saved = catService.addCat(c, !isAdmin);
+        boolean saved = catService.save(c);
+
         int code = saved ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = saved ? "" : "添加猫咪失败！";
         return new Result(code, saved, msg);
@@ -43,7 +38,7 @@ public class CatController {
      */
     @GetMapping
     public Result getAllCats() {
-        List<CatDTO> cats = catService.getAllCats(false);
+        List<CatDTO> cats = catService.getAllCats();
         int code = cats != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = cats != null ? "" : "猫咪数据查询失败！";
         return new Result(code, cats, msg);
@@ -57,7 +52,7 @@ public class CatController {
      */
     @GetMapping("/{id}")
     public Result getCatById(@PathVariable long id) {
-        CatDTO cat = catService.getCatById(id, false);
+        CatDTO cat = catService.getCatById(id);
         int code = cat != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = cat != null ? "" : "猫咪数据查询失败！";
         return new Result(code, cat, msg);

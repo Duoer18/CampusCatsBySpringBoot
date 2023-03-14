@@ -1,6 +1,5 @@
 package com.duoer.campus.config;
 
-import com.duoer.campus.web.interceptor.AdminInterceptor;
 import com.duoer.campus.web.interceptor.LogInInterceptor;
 import com.duoer.campus.web.interceptor.NoCacheInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private LogInInterceptor logInInterceptor;
     @Autowired
-    private AdminInterceptor adminInterceptor;
-    @Autowired
     private NoCacheInterceptor noCacheInterceptor;
 
     /**
@@ -27,8 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(logInInterceptor)
                 .addPathPatterns("/feedings/**", "/appearances/**", "/cats/**");
-        registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/admin/**");
         registry.addInterceptor(noCacheInterceptor)
                 .addPathPatterns("/pages/admin/*", "/users");
     }

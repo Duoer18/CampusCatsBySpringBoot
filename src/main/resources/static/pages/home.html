@@ -28,13 +28,6 @@
     <input type="button" id="logoutBtn" class="btn btn-primary btn-sm" v-if="user.username !== 'visitor'"
            @click="logout" value="注销">
     </div>
-    <div id="adminOp" v-if="user.isAdmin">
-        <hr>
-        <input type="button" id="catCheck" class="btn btn-primary btn-sm" style="margin-left: 0.5%"
-               onclick="location.href = '/CampusCats/adminCats'" value="猫咪添加审核">
-        <input type="button" id="recordsCheck" class="btn btn-primary btn-sm"
-               onclick="location.href = '/CampusCats/adminRecords'" value="记录提交审核">
-    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

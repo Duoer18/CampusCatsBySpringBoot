@@ -15,19 +15,17 @@ public interface CatService extends IService<Cat> {
     /**
      * 获取所有猫咪
      *
-     * @param isTmp 是否临时表
      * @return 所有猫咪集合
      */
-    List<CatDTO> getAllCats(boolean isTmp);
+    List<CatDTO> getAllCats();
 
     /**
      * 按id查猫咪
      *
      * @param id    编号
-     * @param isTmp 是否临时表
      * @return 猫咪对象
      */
-    CatDTO getCatById(long id, boolean isTmp);
+    CatDTO getCatById(long id);
 
     /**
      * 多条件查找
@@ -38,30 +36,12 @@ public interface CatService extends IService<Cat> {
     List<CatDTO> catRandomSearch(Cat c);
 
     /**
-     * 从临时表中将猫咪添加到正式表
-     *
-     * @param id 编号
-     * @return 状态码
-     */
-    boolean addCatPass(long id);
-
-    /**
-     * 添加新猫咪
-     *
-     * @param c     猫咪对象
-     * @param isTmp 是否临时表
-     * @return 状态码
-     */
-    boolean addCat(Cat c, boolean isTmp);
-
-    /**
      * 按id删除某猫咪
      *
      * @param id    编号
-     * @param isTmp 是否临时表
      * @return 状态码
      */
-    boolean deleteCatById(long id, boolean isTmp);
+    boolean deleteCatById(long id);
 
     /**
      * 更新猫咪信息

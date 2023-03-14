@@ -27,7 +27,7 @@ public class FeedingRecordController {
      */
     @GetMapping
     public Result getAllRecords() {
-        List<FeedingRecordDTO> records = feedingRecordService.getAllRecords(false);
+        List<FeedingRecordDTO> records = feedingRecordService.getAllRecords();
         return ResultGenerator.getResult(records);
     }
 
@@ -56,12 +56,9 @@ public class FeedingRecordController {
 
         User user = BaseContext.get();
         String username =user.getUsername();
-        Boolean isAdmin = user.getIsAdmin();
-        isAdmin = isAdmin != null ? isAdmin : false;
-
-        fr.setRecordId(null);
         fr.setUsername(username);
-        boolean saved = feedingRecordService.addRecord(fr, !isAdmin);
+        fr.setRecordId(null);
+        boolean saved = feedingRecordService.save(fr);
 
         int code = saved ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
         String msg = saved ? "" : "添加记录失败！";
@@ -91,9 +88,7 @@ public class FeedingRecordController {
         System.out.println(Arrays.toString(ids));
         User user = BaseContext.get();
         String username =user.getUsername();
-        Boolean isAdmin = user.getIsAdmin();
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean deleted = feedingRecordService.deleteRecord(ids, username, isAdmin);
+        boolean deleted = feedingRecordService.deleteRecord(ids, username);
         String msg = deleted ? "" : "删除记录失败！";
         int code = deleted ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
         return new Result(code, deleted, msg);
@@ -109,9 +104,7 @@ public class FeedingRecordController {
     public Result updateRecord(@RequestBody FeedingRecord fr) {
         User user = BaseContext.get();
         fr.setUsername(user.getUsername());
-        Boolean isAdmin = user.getIsAdmin();
-        isAdmin = isAdmin != null ? isAdmin : false;
-        boolean updated = feedingRecordService.updateRecord(fr, !isAdmin);
+        boolean updated = feedingRecordService.updateRecord(fr);
 
         int code = updated ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
         String msg = updated ? "" : "更新记录失败！";
@@ -126,7 +119,7 @@ public class FeedingRecordController {
      */
     @GetMapping("/{id}")
     public Result PreUpdateRecord(@PathVariable long id) {
-        FeedingRecordDTO record = feedingRecordService.getRecordById(id, false);
+        FeedingRecordDTO record = feedingRecordService.getRecordById(id);
         int code = record != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = record != null ? "" : "记录数据查询失败！";
         return new Result(code, record, msg);

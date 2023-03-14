@@ -42,13 +42,8 @@ public class FeedingRecServiceImpl extends ServiceImpl<FeedingRecordMapper, Feed
     }
 
     @Override
-    public List<FeedingRecordDTO> getAllRecords(boolean isTmp) {
-        List<FeedingRecord> feedingRecords;
-        if (isTmp) {
-            feedingRecords = feedingRecordMapper.getTmpRecords();
-        } else {
-            feedingRecords = list();
-        }
+    public List<FeedingRecordDTO> getAllRecords() {
+        List<FeedingRecord> feedingRecords = list();
         return getDTOList(feedingRecords);
     }
 
@@ -60,13 +55,8 @@ public class FeedingRecServiceImpl extends ServiceImpl<FeedingRecordMapper, Feed
     }
 
     @Override
-    public FeedingRecordDTO getRecordById(long id, boolean isTmp) {
-        FeedingRecord fr;
-        if (isTmp) {
-            fr = feedingRecordMapper.getTmpRecordById(id);
-        } else {
-            fr = getById(id);
-        }
+    public FeedingRecordDTO getRecordById(long id) {
+        FeedingRecord fr = getById(id);
         return getDTO(fr);
     }
 
@@ -78,31 +68,8 @@ public class FeedingRecServiceImpl extends ServiceImpl<FeedingRecordMapper, Feed
     }
 
     @Override
-    public boolean addRecord(FeedingRecord fr, boolean isTmp) {
-        if (isTmp) {
-            fr.setDeleted(1);
-            fr.setNeedCheck(1);
-        }
-        return save(fr);
-    }
-
-    @Override
-    public boolean addRecordCheckPass(long id) {
-        return feedingRecordMapper.addRecordPass(id);
-    }
-
-    @Override
-    public boolean addRecordReject(long id) {
-        return feedingRecordMapper.addRecordReject(id);
-    }
-
-    @Override
-    public boolean updateRecord(FeedingRecord fr, boolean isTmp) {
+    public boolean updateRecord(FeedingRecord fr) {
         LambdaUpdateWrapper<FeedingRecord> updateWrapper = new LambdaUpdateWrapper<>();
-        if (isTmp) {
-            updateWrapper.set(FeedingRecord::getDeleted, 1)
-                    .set(FeedingRecord::getNeedCheck, 1);
-        }
         updateWrapper.set(null != fr.getCatId(), FeedingRecord::getCatId, fr.getCatId())
                 .set(null != fr.getLocationId(), FeedingRecord::getLocationId, fr.getLocationId())
                 .set(null != fr.getRecordTime(), FeedingRecord::getRecordTime, fr.getRecordTime())
@@ -112,7 +79,7 @@ public class FeedingRecServiceImpl extends ServiceImpl<FeedingRecordMapper, Feed
     }
 
     @Override
-    public boolean deleteRecord(long[] ids, String username, Boolean isAdmin) {
-        return feedingRecordMapper.deleteFeedingRecordsByIds(ids, username, isAdmin);
+    public boolean deleteRecord(long[] ids, String username) {
+        return feedingRecordMapper.deleteFeedingRecordsByIds(ids, username);
     }
 }
