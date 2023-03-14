@@ -1,8 +1,6 @@
-package com.duoer.campus.web.exception;
+package com.duoer.campus.exception;
 
-import com.duoer.campus.exception.BusinessException;
-import com.duoer.campus.exception.SystemException;
-import com.duoer.campus.web.format.ResponseCode;
+import com.duoer.campus.response.ResponseCode;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

@@ -26,7 +26,7 @@
     <input type="button" class="btn btn-primary btn-sm" id="myRecordBtn" v-if="user.username !== 'visitor'"
            onclick="location.href = '/CampusCats/userRecords'" value="查看我的记录">
     <input type="button" id="logoutBtn" class="btn btn-primary btn-sm" v-if="user.username !== 'visitor'"
-           onclick="location.href = '/CampusCats/logout'" value="注销">
+           @click="logout" value="注销">
     </div>
     <div id="adminOp" v-if="user.isAdmin">
         <hr>
@@ -50,6 +50,12 @@
         },
         async mounted() {
             this.user = await userMsg(" 的空间");
+        },
+        methods: {
+            async logout() {
+                localStorage.removeItem("token");
+                location.href = '/CampusCats/logout';
+            }
         }
     });
 </script>

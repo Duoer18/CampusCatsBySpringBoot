@@ -9,7 +9,7 @@
 <div id="loginDiv">
     <form action="#" method="post" style="margin-left: 0.5%" id="form">
         <h1 id="loginMsg">你好，请登录</h1>
-        <h5 id="al" style="text-align: center" v-if="status.code === 20012 || user.username !== 'visitor' && status.code !== 20010">
+        <h5 id="al" style="text-align: center" v-if="status.code === 20012 || status.code !== 20010 && user.username !== 'visitor'">
             您当前已登录其他账号 {{user.username}}，请先注销该账号！
         </h5>
         <h5 id="wr" style="text-align: center" v-if="status.code === 20010">
@@ -87,8 +87,9 @@
                 this.status = (await myAxios.post('/users/login', this.formData)).data;
                 if (this.status.code === 20011) {
                     location.href = '/CampusCats/home';
-                } else if (this.status.code !== 20010) {
-                    alert("错误：" + this.status.msg + "\n错误代码：" + this.status.code);
+                    localStorage.setItem("token", this.status.data);
+                } else if (this.status.code === 20012) {
+                    this.user.username = this.status.msg;
                 }
             },
             reset() {

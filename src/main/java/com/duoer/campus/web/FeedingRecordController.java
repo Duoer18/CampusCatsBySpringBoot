@@ -1,15 +1,16 @@
 package com.duoer.campus.web;
 
+import com.duoer.campus.BaseContext;
 import com.duoer.campus.dto.RecordDTO;
 import com.duoer.campus.entity.FeedingRecord;
 import com.duoer.campus.entity.FeedingRecordTemp;
+import com.duoer.campus.entity.User;
 import com.duoer.campus.service.RecordService;
-import com.duoer.campus.web.format.ResponseCode;
-import com.duoer.campus.web.format.Result;
+import com.duoer.campus.response.ResponseCode;
+import com.duoer.campus.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +39,9 @@ public class FeedingRecordController {
      * @return 所有记录集合
      */
     @GetMapping("/user")
-    public Result getAllRecordsByUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
+    public Result getAllRecordsByUsername() {
+        User user = BaseContext.get();
+        String username =user.getUsername();
         List<? extends RecordDTO> records = recordService.getAllRecordsByUsername(username, "feeding");
         int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = records != null ? "" : "记录数据查询失败！";
@@ -53,11 +55,13 @@ public class FeedingRecordController {
      * @return 状态码
      */
     @PostMapping
-    public Result addRecord(@RequestBody FeedingRecord fr, HttpSession session) {
+    public Result addRecord(@RequestBody FeedingRecord fr) {
         System.out.println(fr);
+        User user = BaseContext.get();
+        String username =user.getUsername();
+        Boolean isAdmin = user.getIsAdmin();
         fr.setRecordId(null);
-        fr.setUsername((String) session.getAttribute("username"));
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        fr.setUsername(username);
         isAdmin = isAdmin != null ? isAdmin : false;
         int status = isAdmin ?
                 recordService.addRecord(fr) :
@@ -88,11 +92,11 @@ public class FeedingRecordController {
      * @return 状态码
      */
     @DeleteMapping
-    public Result deleteRecord(@RequestBody long[] ids, HttpSession session) {
+    public Result deleteRecord(@RequestBody long[] ids) {
         System.out.println(Arrays.toString(ids));
-        String username = (String) session.getAttribute("username");
-        username = username != null ? username : "";
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        User user = BaseContext.get();
+        String username =user.getUsername();
+        Boolean isAdmin = user.getIsAdmin();
         isAdmin = isAdmin != null ? isAdmin : false;
         int status = recordService.deleteRecord(ids, "feeding", username, isAdmin);
         int code = status >= 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
@@ -107,11 +111,13 @@ public class FeedingRecordController {
      * @return 状态码
      */
     @PutMapping
-    public Result updateRecord(@RequestBody FeedingRecord fr, HttpSession session) {
-        fr.setUsername((String) session.getAttribute("username"));
+    public Result updateRecord(@RequestBody FeedingRecord fr) {
+        User user = BaseContext.get();
+        String username =user.getUsername();
+        Boolean isAdmin = user.getIsAdmin();
+        fr.setUsername(username);
 
         int status;
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         isAdmin = isAdmin != null ? isAdmin : false;
         if (isAdmin) {
             status = recordService.updateRecord(fr);

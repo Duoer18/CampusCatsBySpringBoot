@@ -5,8 +5,8 @@ import com.duoer.campus.dto.RecordDTO;
 import com.duoer.campus.entity.Cat;
 import com.duoer.campus.service.CatService;
 import com.duoer.campus.service.RecordService;
-import com.duoer.campus.web.format.ResponseCode;
-import com.duoer.campus.web.format.Result;
+import com.duoer.campus.response.ResponseCode;
+import com.duoer.campus.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

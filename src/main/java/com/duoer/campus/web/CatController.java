@@ -1,11 +1,13 @@
 package com.duoer.campus.web;
 
+import com.duoer.campus.BaseContext;
 import com.duoer.campus.dto.CatDTO;
 import com.duoer.campus.entity.Cat;
 import com.duoer.campus.entity.CatTemp;
+import com.duoer.campus.entity.User;
 import com.duoer.campus.service.CatService;
-import com.duoer.campus.web.format.ResponseCode;
-import com.duoer.campus.web.format.Result;
+import com.duoer.campus.response.ResponseCode;
+import com.duoer.campus.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,11 @@ public class CatController {
      * @return 状态码
      */
     @PostMapping
-    public Result addCat(@RequestBody Cat c, HttpSession session) {
+    public Result addCat(@RequestBody Cat c) {
         // 若为管理员则直接完成添加，否则添加到临时表待审核
-        String username = (String) session.getAttribute("username");
-        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        User user = BaseContext.get();
+        String username =user.getUsername();
+        Boolean isAdmin = user.getIsAdmin();
         isAdmin = isAdmin != null ? isAdmin : false;
         c.setRecordCount(0);
         int status = catService.addCat(isAdmin ? c : new CatTemp(c, username), !isAdmin);

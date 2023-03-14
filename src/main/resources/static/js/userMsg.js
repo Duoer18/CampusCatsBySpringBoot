@@ -1,6 +1,9 @@
 const myAxios = axios.create(
     {
-        baseURL: 'http://192.168.0.102:8080/CampusCats'
+        baseURL: 'http://192.168.0.102:8080/CampusCats',
+        headers: {
+            token: localStorage.getItem("token")
+        }
     }
 );
 async function userMsg(title) {

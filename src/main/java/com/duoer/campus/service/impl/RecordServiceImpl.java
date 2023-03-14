@@ -13,7 +13,7 @@ import com.duoer.campus.dto.wrapper.RecordDTOWrapper;
 import com.duoer.campus.entity.*;
 import com.duoer.campus.exception.BusinessException;
 import com.duoer.campus.service.RecordService;
-import com.duoer.campus.web.format.ResponseCode;
+import com.duoer.campus.response.ResponseCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

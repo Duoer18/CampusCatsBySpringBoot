@@ -1,4 +1,4 @@
-package com.duoer.campus.web.format;
+package com.duoer.campus.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

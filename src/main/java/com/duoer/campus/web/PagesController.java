@@ -3,8 +3,6 @@ package com.duoer.campus.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 public class PagesController {
     @RequestMapping("/login")
@@ -18,8 +16,7 @@ public class PagesController {
      * @return 状态
      */
     @RequestMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
+    public String logout() {
         return "redirect:/login";
     }
 

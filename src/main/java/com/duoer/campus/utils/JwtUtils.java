@@ -1,9 +1,7 @@
 package com.duoer.campus.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import org.apache.commons.lang.StringUtils;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -75,21 +73,30 @@ public class JwtUtils {
      * @param jwt jwt
      * @return 结果
      */
-    public static Claims parseJWT(String jwt) {
-        SecretKey secretKey = generalKey();
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(jwt)
-                .getBody();
+    public static String parseJWT(String jwt) {
+        if (StringUtils.isEmpty(jwt)) {
+            return null;
+        }
+
+        try {
+            SecretKey secretKey = generalKey();
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(jwt)
+                    .getBody();
+            return claims.getSubject();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static void main(String[] args) {
         String jwt = createJWT("duoer");
         System.out.println(jwt);
         try {
-            Claims claims = parseJWT("jwt");
-            System.out.println(claims.getSubject());
-        } catch (Exception e) {
+            String claims = parseJWT("jwt");
+            System.out.println(claims);
+        } catch (JwtException e) {
             e.printStackTrace();
             System.out.println("wrong!");
         }

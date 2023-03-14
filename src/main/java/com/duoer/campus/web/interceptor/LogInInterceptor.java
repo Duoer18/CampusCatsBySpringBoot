@@ -1,12 +1,17 @@
 package com.duoer.campus.web.interceptor;
 
+import com.alibaba.fastjson2.JSON;
+import com.duoer.campus.BaseContext;
+import com.duoer.campus.entity.User;
+import com.duoer.campus.utils.JwtUtils;
+import io.jsonwebtoken.JwtException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * 登录校验拦截器，用于拦截未登录游客的增删改请求
@@ -20,17 +25,26 @@ public class LogInInterceptor implements HandlerInterceptor {
      * 否则，获取当前session，若其username属性为空，则拦截
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        String token = request.getHeader("token");
+        System.out.println(token);
+
         String method = request.getMethod();
         if (method.equalsIgnoreCase("GET") && !request.getRequestURI().endsWith("user")) {
             return true;
         } else {
-            HttpSession session = request.getSession();
-            boolean signed = session.getAttribute("username") != null;
-            if (!signed) {
-                response.sendRedirect("/CampusCats/login");
+            String userJSON = JwtUtils.parseJWT(token);
+            if (StringUtils.isEmpty(userJSON)) {
+                throw new JwtException("not login");
             }
-            return signed;
+            User user = JSON.parseObject(userJSON, User.class);
+//            HttpSession session = request.getSession();
+//            boolean signed = session.getAttribute("username") != null;
+//            if (!signed) {
+//                response.sendRedirect("/CampusCats/login");
+//            }
+            BaseContext.set(user);
+            return true;
         }
     }
 
@@ -42,5 +56,6 @@ public class LogInInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+        BaseContext.remove();
     }
 }

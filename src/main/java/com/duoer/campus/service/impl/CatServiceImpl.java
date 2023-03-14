@@ -99,7 +99,7 @@ public class CatServiceImpl implements CatService {
         }*/
         CatTemp catTemp = catTempMapper.selectById(id);
         System.out.println(catTemp);
-        if (catTemp != null && catTempMapper.updateById(catTemp) == 1) {
+        if (catTemp != null && catTempMapper.myDeleteById(id, catTemp.getVersion()) == 1) {
             catTempMapper.deleteById(id);
             catTemp.setCatId(null);
             return catMapper.insert(catTemp);

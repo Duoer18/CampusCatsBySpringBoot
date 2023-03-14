@@ -1,4 +1,4 @@
-package com.duoer.campus.web.format;
+package com.duoer.campus.response;
 
 /**
  * 响应状态码枚举类
