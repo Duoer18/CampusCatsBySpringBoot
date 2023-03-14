@@ -1,6 +1,5 @@
 package com.duoer.campus.service;
 
-import com.duoer.campus.dto.RecordDTO;
 import com.duoer.campus.entity.MyRecord;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,7 @@ public interface RecordService {
      * @param type 类型
      * @return 所有记录集合
      */
-    List<? extends RecordDTO> getAllRecords(String type);
+    List<? extends MyRecord> getAllRecords(String type);
 
     /**
      * 获取某用户所有记录
@@ -28,7 +27,7 @@ public interface RecordService {
      * @param type     类型
      * @return 所有记录集合
      */
-    List<? extends RecordDTO> getAllRecordsByUsername(String username, String type);
+    List<? extends MyRecord> getAllRecordsByUsername(String username, String type);
 
     /**
      * 获取所有临时表记录
@@ -36,7 +35,7 @@ public interface RecordService {
      * @param type 类型
      * @return 所有记录集合
      */
-    List<? extends RecordDTO> getAllTempRecords(String type);
+    List<? extends MyRecord> getAllTempRecords(String type);
 
     /**
      * 按编号查记录
@@ -45,7 +44,7 @@ public interface RecordService {
      * @param type 类型
      * @return 记录
      */
-    RecordDTO getRecordById(long id, String type);
+    MyRecord getRecordById(long id, String type);
 
     /**
      * 按编号查临时表记录
@@ -54,7 +53,7 @@ public interface RecordService {
      * @param type 类型
      * @return 记录
      */
-    RecordDTO getTempRecordById(long id, String type);
+    MyRecord getTempRecordById(long id, String type);
 
     /**
      * 获取某猫咪所有记录
@@ -63,7 +62,7 @@ public interface RecordService {
      * @param type 类型
      * @return 所有记录集合
      */
-    List<? extends RecordDTO> getCatOwnRecords(long id, String type);
+    List<? extends MyRecord> getCatOwnRecords(long id, String type);
 
     /**
      * 添加新记录
@@ -101,13 +100,13 @@ public interface RecordService {
     /**
      * 删除某些记录
      *
-     * @param ids  id数组
-     * @param type 类型
+     * @param ids      id数组
+     * @param type     类型
      * @param username 用户名
-     * @param isAdmin 是否管理员
+     * @param isAdmin  是否管理员
      * @return 状态码
      */
-    int deleteRecord(long[] ids, String type, String username, Boolean isAdmin);
+    boolean deleteRecord(long[] ids, String type, String username, Boolean isAdmin);
 
     /**
      * 删除某些临时表记录

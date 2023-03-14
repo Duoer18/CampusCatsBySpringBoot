@@ -1,25 +1,30 @@
 package com.duoer.campus.web;
 
 import com.duoer.campus.dto.CatDTO;
-import com.duoer.campus.dto.RecordDTO;
+import com.duoer.campus.entity.AppearanceRecord;
 import com.duoer.campus.entity.Cat;
+import com.duoer.campus.entity.FeedingRecord;
+import com.duoer.campus.entity.MyRecord;
+import com.duoer.campus.service.AppearanceRecordService;
 import com.duoer.campus.service.CatService;
-import com.duoer.campus.service.RecordService;
+import com.duoer.campus.service.FeedingRecordService;
 import com.duoer.campus.response.ResponseCode;
 import com.duoer.campus.response.Result;
+import com.duoer.campus.utils.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
-    private RecordService recordService;
-    @Autowired
     private CatService catService;
+    @Autowired
+    private FeedingRecordService feedingRecordService;
+    @Autowired
+    private AppearanceRecordService appearanceRecordService;
 
     /**
      * 获取所有待审核猫咪信息
@@ -42,10 +47,10 @@ public class AdminController {
      */
     @GetMapping("/cats/{id}")
     public Result addCatCheckPass(@PathVariable long id) {
-        int status = catService.addCatFromTemp(id);
-        int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
-        String msg = status == 1 ? "" : "添加猫咪失败！";
-        return new Result(code, status, msg);
+        boolean updated = catService.addCatPass(id);
+        int code = updated ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
+        String msg = updated ? "" : "添加猫咪失败！";
+        return new Result(code, updated, msg);
     }
 
     /**
@@ -56,10 +61,10 @@ public class AdminController {
      */
     @DeleteMapping("/cats/{id}")
     public Result deleteCat(@PathVariable long id) {
-        int status = catService.deleteCatById(id, false);
-        int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
-        String msg = status == 1 ? "" : "删除猫咪失败！";
-        return new Result(code, status, msg);
+        boolean deleted = catService.deleteCatById(id, false);
+        int code = deleted ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
+        String msg = deleted ? "" : "删除猫咪失败！";
+        return new Result(code, deleted, msg);
     }
 
     /**
@@ -70,10 +75,10 @@ public class AdminController {
      */
     @DeleteMapping("/cats/tmp/{id}")
     public Result addCatCheckReject(@PathVariable long id) {
-        int status = catService.deleteCatById(id, true);
-        int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
-        String msg = status == 1 ? "" : "删除猫咪失败！";
-        return new Result(code, status, msg);
+        boolean deleted = catService.deleteCatById(id, true);
+        int code = deleted ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
+        String msg = deleted ? "" : "删除猫咪失败！";
+        return new Result(code, deleted, msg);
     }
 
     /**
@@ -84,10 +89,10 @@ public class AdminController {
      */
     @PutMapping("/cats")
     public Result updateCat(@RequestBody Cat c) {
-        int status = catService.updateCat(c);
-        int code = status == 1 ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
-        String msg = status == 1 ? "" : "修改猫咪失败！";
-        return new Result(code, status, msg);
+        boolean updated = catService.updateCat(c);
+        int code = updated ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
+        String msg = updated ? "" : "修改猫咪失败！";
+        return new Result(code, updated, msg);
     }
 
     /**
@@ -97,10 +102,14 @@ public class AdminController {
      */
     @GetMapping("/records/{type}")
     public Result getAllTempRecords(@PathVariable String type) {
-        List<? extends RecordDTO> records = recordService.getAllTempRecords(type);
-        int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
-        String msg = records != null ? "" : "记录数据查询失败！";
-        return new Result(code, records, msg);
+        List<? extends MyRecord> records = null;
+        if (type.equals("feeding")) {
+            records = feedingRecordService.getAllRecords(true);
+        } else if (type.equals("appearance")) {
+            records = appearanceRecordService.getAllRecords(true);
+        }
+
+        return ResultGenerator.getResult(records);
     }
 
     /**
@@ -111,23 +120,33 @@ public class AdminController {
      */
     @GetMapping("/records/{type}/{id}")
     public Result addRecordCheckPass(@PathVariable long id, @PathVariable String type) {
-        int status = recordService.addRecordCheckPass(id, type);
-        int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
-        String msg = status == 1 ? "" : "添加记录失败！";
-        return new Result(code, status, msg);
+        boolean updated = false;
+        if (type.equals("feeding")) {
+            updated = feedingRecordService.addRecordCheckPass(id);
+        } else if (type.equals("appearance")) {
+            updated = appearanceRecordService.addRecordCheckPass(id);
+        }
+
+        int code = updated ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
+        String msg = updated ? "" : "添加记录失败！";
+        return new Result(code, updated, msg);
     }
 
     /**
      * 驳回记录请求申请
-     * @param id 临时表id
-     * @param type 类型
+     * @param record 记录
      * @return 状态码
      */
-    @DeleteMapping("/records/{type}/{id}")
-    public Result addRecordCheckReject(@PathVariable long id, @PathVariable String type) {
-        int status = recordService.deleteTempRecord(Collections.singletonList(id), type);
-        int code = status == 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
-        String msg = status == 1 ? "" : "删除记录失败！";
-        return new Result(code, status, msg);
+    @DeleteMapping("/records")
+    public Result addRecordCheckReject(@RequestBody MyRecord record) {
+        boolean updated = false;
+        if (record instanceof FeedingRecord) {
+            updated = feedingRecordService.addRecordReject(record.getRecordId());
+        } else if (record instanceof AppearanceRecord) {
+            updated = appearanceRecordService.addRecordReject(record.getRecordId());
+        }
+        int code = updated ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
+        String msg = updated ? "" : "删除记录失败！";
+        return new Result(code, updated, msg);
     }
 }

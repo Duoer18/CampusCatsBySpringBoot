@@ -1,20 +1,13 @@
 package com.duoer.campus.dto;
 
+import com.duoer.campus.entity.FeedingRecord;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Data
 @NoArgsConstructor
-public class FeedingRecordDTO extends RecordDTO {
-    private String remarks;
-    private Long formerId;
-
-    public FeedingRecordDTO(Long recordId, Long catId, String catName,
-                            String username, Long locationId, String location,
-                            String recordTime, String lastUpdate, String remarks, Long formerId) {
-        super(recordId, catId, catName, username, locationId, location, recordTime, lastUpdate);
-        this.remarks = remarks;
-        this.formerId = formerId;
-    }
+public class FeedingRecordDTO extends FeedingRecord {
+    private String catName;
+    private String location;
 }

@@ -1,6 +1,7 @@
 package com.duoer.campus.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class Cat {
     private Long characterId;
     private Long locationId;
     private Integer recordCount;
+    private Integer deleted;
+    private Integer needCheck;
 }

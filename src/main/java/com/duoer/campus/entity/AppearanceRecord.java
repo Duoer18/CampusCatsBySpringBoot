@@ -12,6 +12,5 @@ import lombok.ToString;
 public class AppearanceRecord extends MyRecord {
     public AppearanceRecord(Long recordId, Long catId, String username,
                             Long locationId, String recordTime, String lastUpdate) {
-        super(recordId, catId, username, locationId, recordTime, lastUpdate);
     }
 }

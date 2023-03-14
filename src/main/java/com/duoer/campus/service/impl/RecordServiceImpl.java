@@ -8,12 +8,12 @@ import com.duoer.campus.dao.FeedingRecordMapper;
 import com.duoer.campus.dao.FeedingRecordTempMapper;
 import com.duoer.campus.dto.AppearanceRecordDTO;
 import com.duoer.campus.dto.FeedingRecordDTO;
-import com.duoer.campus.dto.RecordDTO;
 import com.duoer.campus.dto.wrapper.RecordDTOWrapper;
 import com.duoer.campus.entity.*;
 import com.duoer.campus.exception.BusinessException;
 import com.duoer.campus.service.RecordService;
 import com.duoer.campus.response.ResponseCode;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +34,12 @@ public class RecordServiceImpl implements RecordService {
     private AppearanceRecordTempMapper appearanceRecordTempMapper;
     @Autowired
     private RecordDTOWrapper recordDTOWrapper;
+
+    private FeedingRecordDTO getFeedingDTO(FeedingRecord fr) {
+        FeedingRecordDTO feedingRecordDTO = new FeedingRecordDTO();
+        BeanUtils.copyProperties(fr, feedingRecordDTO);
+        return null;
+    }
 
     private List<FeedingRecordDTO> queryFeeding(LambdaQueryWrapper<FeedingRecord> wrapper) {
         ArrayList<FeedingRecordDTO> records = new ArrayList<>();
@@ -60,7 +66,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 所有记录集合
      */
     @Override
-    public List<? extends RecordDTO> getAllRecords(String type) {
+    public List<? extends MyRecord> getAllRecords(String type) {
         if (type.equals("feeding")) {
             return queryFeeding(null);
         } else if (type.equals("appearance")) {
@@ -79,7 +85,7 @@ public class RecordServiceImpl implements RecordService {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public List<? extends RecordDTO> getAllRecordsByUsername(String username, String type) {
+    public List<? extends MyRecord> getAllRecordsByUsername(String username, String type) {
         if (type.equals("feeding")) {
             LambdaQueryWrapper<FeedingRecord> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(FeedingRecord::getUsername, username);
@@ -100,7 +106,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 所有记录集合
      */
     @Override
-    public List<? extends RecordDTO> getAllTempRecords(String type) {
+    public List<? extends MyRecord> getAllTempRecords(String type) {
         if (type.equals("feeding")) {
             ArrayList<FeedingRecordDTO> records = new ArrayList<>();
             List<FeedingRecordTemp> recordList = feedingRecordTempMapper.selectList(null);
@@ -128,7 +134,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 记录
      */
     @Override
-    public RecordDTO getRecordById(long id, String type) {
+    public MyRecord getRecordById(long id, String type) {
         if (type.equals("feeding")) {
             FeedingRecord fr = feedingRecordMapper.selectById(id);
             return recordDTOWrapper.wrapFeeding(fr);
@@ -148,7 +154,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 记录
      */
     @Override
-    public RecordDTO getTempRecordById(long id, String type) {
+    public MyRecord getTempRecordById(long id, String type) {
         if (type.equals("feeding")) {
             FeedingRecordTemp fr = feedingRecordTempMapper.selectById(id);
             return recordDTOWrapper.wrapFeeding(fr);
@@ -169,7 +175,7 @@ public class RecordServiceImpl implements RecordService {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public List<? extends RecordDTO> getCatOwnRecords(long id, String type) {
+    public List<? extends MyRecord> getCatOwnRecords(long id, String type) {
         if (type.equals("feeding")) {
             LambdaQueryWrapper<FeedingRecord> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(FeedingRecord::getCatId, id);
@@ -298,7 +304,7 @@ public class RecordServiceImpl implements RecordService {
      * @return 状态码
      */
     @Override
-    public int deleteRecord(long[] ids, String type, String username, Boolean isAdmin) {
+    public boolean deleteRecord(long[] ids, String type, String username, Boolean isAdmin) {
         if (type.equals("feeding")) {
             return feedingRecordMapper.deleteFeedingRecordsByIds(ids, username, isAdmin);
         } else if (type.equals("appearance")) {

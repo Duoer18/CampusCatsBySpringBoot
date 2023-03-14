@@ -21,8 +21,7 @@ public class CatTemp extends Cat {
     private Integer version;
 
     public CatTemp(Cat c, String username) {
-        super(c.getCatId(), c.getCatName(), c.getCategoryId(),
-                c.getColorId(), c.getCharacterId(), c.getLocationId(), c.getRecordCount());
+
         this.username = username;
     }
 }

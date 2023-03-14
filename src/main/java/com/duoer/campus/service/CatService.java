@@ -1,8 +1,8 @@
 package com.duoer.campus.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.duoer.campus.dto.CatDTO;
 import com.duoer.campus.entity.Cat;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,8 +11,7 @@ import java.util.List;
  *
  * @author duoer
  */
-@Transactional
-public interface CatService {
+public interface CatService extends IService<Cat> {
     /**
      * 获取所有猫咪
      *
@@ -44,7 +43,7 @@ public interface CatService {
      * @param id 编号
      * @return 状态码
      */
-    int addCatFromTemp(long id);
+    boolean addCatPass(long id);
 
     /**
      * 添加新猫咪
@@ -53,7 +52,7 @@ public interface CatService {
      * @param isTmp 是否临时表
      * @return 状态码
      */
-    int addCat(Cat c, boolean isTmp);
+    boolean addCat(Cat c, boolean isTmp);
 
     /**
      * 按id删除某猫咪
@@ -62,7 +61,7 @@ public interface CatService {
      * @param isTmp 是否临时表
      * @return 状态码
      */
-    int deleteCatById(long id, boolean isTmp);
+    boolean deleteCatById(long id, boolean isTmp);
 
     /**
      * 更新猫咪信息
@@ -70,5 +69,5 @@ public interface CatService {
      * @param c 猫咪对象
      * @return 状态码
      */
-    int updateCat(Cat c);
+    boolean updateCat(Cat c);
 }

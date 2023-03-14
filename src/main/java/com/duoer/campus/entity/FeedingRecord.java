@@ -11,7 +11,6 @@ public class FeedingRecord extends MyRecord {
 
     public FeedingRecord(Long recordId, Long catId, String username,
                          Long locationId, String recordTime, String lastUpdate, String remarks) {
-        super(recordId, catId, username, locationId, recordTime, lastUpdate);
         this.remarks = remarks;
     }
 }

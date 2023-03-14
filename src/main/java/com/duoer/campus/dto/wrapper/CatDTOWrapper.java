@@ -22,19 +22,6 @@ public class CatDTOWrapper {
     private LocationMapper locationMapper;
 
     public CatDTO wrapCat(Cat c) {
-        return new CatDTO(
-                c.getCatId(),
-                c.getCatName(),
-                c.getCategoryId(),
-                categoryMapper.selectById(c.getCategoryId()).getCategory(),
-                c.getColorId(),
-                colorMapper.selectById(c.getColorId()).getColor(),
-                c.getCharacterId(),
-                characterMapper.selectById(c.getCharacterId()).getCatCharacter(),
-                c.getLocationId(),
-                locationMapper.selectById(c.getLocationId()).getLocation(),
-                c.getRecordCount(),
-                c instanceof CatTemp ? ((CatTemp) c).getUsername() : null
-        );
+        return new CatDTO();
     }
 }

@@ -2,27 +2,48 @@ package com.duoer.campus.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.duoer.campus.dao.CatMapper;
-import com.duoer.campus.dao.CatTempMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.duoer.campus.dao.*;
 import com.duoer.campus.dto.CatDTO;
-import com.duoer.campus.dto.wrapper.CatDTOWrapper;
 import com.duoer.campus.entity.Cat;
-import com.duoer.campus.entity.CatTemp;
 import com.duoer.campus.service.CatService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class CatServiceImpl implements CatService {
+public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatService {
     @Autowired
     private CatMapper catMapper;
     @Autowired
-    private CatTempMapper catTempMapper;
+    private CategoryMapper categoryMapper;
     @Autowired
-    private CatDTOWrapper catDTOWrapper;
+    private CharacterMapper characterMapper;
+    @Autowired
+    private ColorMapper colorMapper;
+    @Autowired
+    private LocationMapper locationMapper;
+
+    private CatDTO getDTO(Cat cat) {
+        CatDTO catDTO = new CatDTO();
+        BeanUtils.copyProperties(cat, catDTO);
+
+        catDTO.setCategory(categoryMapper.selectById(cat.getCategoryId()).getCategory());
+        catDTO.setCharacter(characterMapper.selectById(cat.getCharacterId()).getCatCharacter());
+        catDTO.setColor(colorMapper.selectById(cat.getColorId()).getColor());
+        catDTO.setLocation(locationMapper.selectById(cat.getLocationId()).getLocation());
+
+        return catDTO;
+    }
+
+    private List<CatDTO> getDTOList(List<Cat> cats) {
+        return cats.stream()
+                .map(this::getDTO)
+                .collect(Collectors.toList());
+    }
 
     /**
      * 获取所有猫咪
@@ -32,14 +53,13 @@ public class CatServiceImpl implements CatService {
      */
     @Override
     public List<CatDTO> getAllCats(boolean isTmp) {
-        ArrayList<CatDTO> cats = new ArrayList<>();
-        List<? extends Cat> catList = isTmp ?
-                catTempMapper.selectList(null) :
-                catMapper.selectList(null);
-        for (Cat cat : catList) {
-            cats.add(catDTOWrapper.wrapCat(cat));
+        List<Cat> cats;
+        if (isTmp) {
+            cats = catMapper.getTmpCats();
+        } else {
+            cats = list();
         }
-        return cats;
+        return getDTOList(cats);
     }
 
     /**
@@ -51,8 +71,13 @@ public class CatServiceImpl implements CatService {
      */
     @Override
     public CatDTO getCatById(long id, boolean isTmp) {
-        Cat cat = isTmp ? catTempMapper.selectById(id) : catMapper.selectById(id);
-        return catDTOWrapper.wrapCat(cat);
+        Cat cat;
+        if (isTmp) {
+            cat = catMapper.getTmpCatById(id);
+        } else {
+            cat = getById(id);
+        }
+        return getDTO(cat);
     }
 
     /**
@@ -63,8 +88,6 @@ public class CatServiceImpl implements CatService {
      */
     @Override
     public List<CatDTO> catRandomSearch(Cat c) {
-        ArrayList<CatDTO> cats = new ArrayList<>();
-
         LambdaQueryWrapper<Cat> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(null != c.getCatName(), Cat::getCatName, c.getCatName())
                 .eq(null != c.getCategoryId(), Cat::getCategoryId, c.getCategoryId())
@@ -72,11 +95,9 @@ public class CatServiceImpl implements CatService {
                 .eq(null != c.getCharacterId(), Cat::getCharacterId, c.getCharacterId())
                 .eq(null != c.getLocationId(), Cat::getLocationId, c.getLocationId())
                 .eq(null != c.getRecordCount(), Cat::getRecordCount, c.getRecordCount());
-        List<Cat> catList = catMapper.selectList(wrapper);
-        for (Cat cat : catList) {
-            cats.add(catDTOWrapper.wrapCat(cat));
-        }
-        return cats;
+        List<Cat> cats = list(wrapper);
+
+        return getDTOList(cats);
     }
 
     /**
@@ -86,25 +107,12 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int addCatFromTemp(long id) {
-        /*synchronized (CatLock.get(id)) {
-            Cat catTemp = catTempMapper.selectById(id);
-            if (catTemp != null) {
-                catTempMapper.deleteById(id);
-                catTemp.setCatId(null);
-                return catMapper.insert(catTemp);
-            } else {
-                return 0;
-            }
-        }*/
-        CatTemp catTemp = catTempMapper.selectById(id);
-        System.out.println(catTemp);
-        if (catTemp != null && catTempMapper.myDeleteById(id, catTemp.getVersion()) == 1) {
-            catTempMapper.deleteById(id);
-            catTemp.setCatId(null);
-            return catMapper.insert(catTemp);
-        }
-        return 0;
+    public boolean addCatPass(long id) {
+        Cat cat = new Cat();
+        cat.setCatId(id);
+        cat.setDeleted(0);
+        cat.setNeedCheck(0);
+        return catMapper.addCatPass(id);
     }
 
     /**
@@ -115,8 +123,12 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int addCat(Cat c, boolean isTmp) {
-        return isTmp ? catTempMapper.insert((CatTemp) c) : catMapper.insert(c);
+    public boolean addCat(Cat c, boolean isTmp) {
+        if (isTmp) {
+            c.setNeedCheck(1);
+            c.setDeleted(1);
+        }
+        return save(c);
     }
 
     /**
@@ -127,8 +139,12 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int deleteCatById(long id, boolean isTmp) {
-        return isTmp ? catTempMapper.deleteById(id) : catMapper.deleteById(id);
+    public boolean deleteCatById(long id, boolean isTmp) {
+        if (isTmp) {
+            return catMapper.addCatReject(id);
+        } else {
+            return removeById(id);
+        }
     }
 
     /**
@@ -138,14 +154,14 @@ public class CatServiceImpl implements CatService {
      * @return 状态码
      */
     @Override
-    public int updateCat(Cat c) {
-        LambdaUpdateWrapper<Cat> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.set(null != c.getCatName(), Cat::getCatName, c.getCatName())
+    public boolean updateCat(Cat c) {
+        LambdaUpdateWrapper<Cat> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(null != c.getCatName(), Cat::getCatName, c.getCatName())
                 .set(null != c.getCategoryId(), Cat::getCategoryId, c.getCategoryId())
                 .set(null != c.getColorId(), Cat::getColorId, c.getColorId())
                 .set(null != c.getCharacterId(), Cat::getCharacterId, c.getCharacterId())
                 .set(null != c.getLocationId(), Cat::getLocationId, c.getLocationId())
                 .eq(Cat::getCatId, c.getCatId());
-        return catMapper.update(null, wrapper);
+        return update(updateWrapper);
     }
 }

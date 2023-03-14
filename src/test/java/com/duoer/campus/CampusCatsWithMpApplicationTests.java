@@ -1,7 +1,10 @@
 package com.duoer.campus;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.duoer.campus.dao.AppearanceRecordMapper;
 import com.duoer.campus.dao.AppearanceRecordTempMapper;
+import com.duoer.campus.dao.CatMapper;
 import com.duoer.campus.entity.*;
 import com.duoer.campus.service.CatService;
 import com.duoer.campus.service.RecordService;
@@ -15,7 +18,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootTest
-@Transactional
 class CampusCatsWithMpApplicationTests {
     @Autowired
     private RecordService recordService;
@@ -76,5 +78,27 @@ class CampusCatsWithMpApplicationTests {
 //        System.out.println(appearanceRecordTempMapper.updateById(appearanceRecordTemp));
         AppearanceRecordTemp ar = appearanceRecordTempMapper.selectById(7L);
         appearanceRecordMapper.insert(ar);
+    }
+
+    @Test
+    void catInsert() {
+        Cat cat = new Cat(-1L, "1", 1L, 1L, 1L, 1L,
+                null, 1, 1);
+        catService.save(cat);
+
+        System.out.println(catService.list());
+    }
+
+    @Test
+    void catUpdate() {
+        catService.addCatPass(-1);
+        LambdaQueryWrapper<Cat> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Cat::getDeleted, 1);
+        System.out.println(catService.list(queryWrapper));
+//        System.out.println(catService.getAllCats(true));
+//        LambdaUpdateWrapper<Cat> updateWrapper = new LambdaUpdateWrapper<>();
+//        updateWrapper.set(Cat::getDeleted, 1)
+//                .eq(Cat::getCatId, -1L);
+//        catService.update(updateWrapper);
     }
 }

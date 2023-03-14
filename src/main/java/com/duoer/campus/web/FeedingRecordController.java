@@ -1,13 +1,13 @@
 package com.duoer.campus.web;
 
 import com.duoer.campus.BaseContext;
-import com.duoer.campus.dto.RecordDTO;
+import com.duoer.campus.dto.FeedingRecordDTO;
 import com.duoer.campus.entity.FeedingRecord;
-import com.duoer.campus.entity.FeedingRecordTemp;
 import com.duoer.campus.entity.User;
-import com.duoer.campus.service.RecordService;
+import com.duoer.campus.service.FeedingRecordService;
 import com.duoer.campus.response.ResponseCode;
 import com.duoer.campus.response.Result;
+import com.duoer.campus.utils.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/feedings")
 public class FeedingRecordController {
     @Autowired
-    private RecordService recordService;
+    private FeedingRecordService feedingRecordService;
 
     /**
      * 获取所有记录
@@ -27,10 +27,8 @@ public class FeedingRecordController {
      */
     @GetMapping
     public Result getAllRecords() {
-        List<? extends RecordDTO> records = recordService.getAllRecords("feeding");
-        int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
-        String msg = records != null ? "" : "记录数据查询失败！";
-        return new Result(code, records, msg);
+        List<FeedingRecordDTO> records = feedingRecordService.getAllRecords(false);
+        return ResultGenerator.getResult(records);
     }
 
     /**
@@ -42,10 +40,8 @@ public class FeedingRecordController {
     public Result getAllRecordsByUsername() {
         User user = BaseContext.get();
         String username =user.getUsername();
-        List<? extends RecordDTO> records = recordService.getAllRecordsByUsername(username, "feeding");
-        int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
-        String msg = records != null ? "" : "记录数据查询失败！";
-        return new Result(code, records, msg);
+        List<FeedingRecordDTO> records = feedingRecordService.getAllRecordsByUsername(username);
+        return ResultGenerator.getResult(records);
     }
 
     /**
@@ -57,18 +53,19 @@ public class FeedingRecordController {
     @PostMapping
     public Result addRecord(@RequestBody FeedingRecord fr) {
         System.out.println(fr);
+
         User user = BaseContext.get();
         String username =user.getUsername();
         Boolean isAdmin = user.getIsAdmin();
+        isAdmin = isAdmin != null ? isAdmin : false;
+
         fr.setRecordId(null);
         fr.setUsername(username);
-        isAdmin = isAdmin != null ? isAdmin : false;
-        int status = isAdmin ?
-                recordService.addRecord(fr) :
-                recordService.addTempRecord(new FeedingRecordTemp(fr, -1L));
-        int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
-        String msg = status == 1 ? "" : "添加记录失败！";
-        return new Result(code, status, msg);
+        boolean saved = feedingRecordService.addRecord(fr, !isAdmin);
+
+        int code = saved ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
+        String msg = saved ? "" : "添加记录失败！";
+        return new Result(code, saved, msg);
     }
 
     /**
@@ -79,10 +76,8 @@ public class FeedingRecordController {
      */
     @GetMapping("/cat/{id}")
     public Result catRecords(@PathVariable long id) {
-        List<? extends RecordDTO> records = recordService.getCatOwnRecords(id, "feeding");
-        int code = records != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
-        String msg = records != null ? "" : "记录数据查询失败！";
-        return new Result(code, records, msg);
+        List<FeedingRecordDTO> records = feedingRecordService.getCatOwnRecords(id);
+        return ResultGenerator.getResult(records);
     }
 
     /**
@@ -98,10 +93,10 @@ public class FeedingRecordController {
         String username =user.getUsername();
         Boolean isAdmin = user.getIsAdmin();
         isAdmin = isAdmin != null ? isAdmin : false;
-        int status = recordService.deleteRecord(ids, "feeding", username, isAdmin);
-        int code = status >= 1 ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
-        String msg = status >= 1 ? "" : "删除记录失败！";
-        return new Result(code, status, msg);
+        boolean deleted = feedingRecordService.deleteRecord(ids, username, isAdmin);
+        String msg = deleted ? "" : "删除记录失败！";
+        int code = deleted ? ResponseCode.DEL_SUC.getCode() : ResponseCode.DEL_ERR.getCode();
+        return new Result(code, deleted, msg);
     }
 
     /**
@@ -113,21 +108,14 @@ public class FeedingRecordController {
     @PutMapping
     public Result updateRecord(@RequestBody FeedingRecord fr) {
         User user = BaseContext.get();
-        String username =user.getUsername();
+        fr.setUsername(user.getUsername());
         Boolean isAdmin = user.getIsAdmin();
-        fr.setUsername(username);
-
-        int status;
         isAdmin = isAdmin != null ? isAdmin : false;
-        if (isAdmin) {
-            status = recordService.updateRecord(fr);
-        } else {
-            status = recordService.addTempRecord(new FeedingRecordTemp(fr, fr.getRecordId()));
-        }
+        boolean updated = feedingRecordService.updateRecord(fr, !isAdmin);
 
-        int code = status == 1 ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
-        String msg = status == 1 ? "" : "更新记录失败！";
-        return new Result(code, status, msg);
+        int code = updated ? ResponseCode.UPD_SUC.getCode() : ResponseCode.UPD_ERR.getCode();
+        String msg = updated ? "" : "更新记录失败！";
+        return new Result(code, updated, msg);
     }
 
     /**
@@ -138,7 +126,7 @@ public class FeedingRecordController {
      */
     @GetMapping("/{id}")
     public Result PreUpdateRecord(@PathVariable long id) {
-        RecordDTO record = recordService.getRecordById(id, "feeding");
+        FeedingRecordDTO record = feedingRecordService.getRecordById(id, false);
         int code = record != null ? ResponseCode.GET_SUC.getCode() : ResponseCode.GET_ERR.getCode();
         String msg = record != null ? "" : "记录数据查询失败！";
         return new Result(code, record, msg);

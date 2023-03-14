@@ -3,7 +3,6 @@ package com.duoer.campus.web;
 import com.duoer.campus.BaseContext;
 import com.duoer.campus.dto.CatDTO;
 import com.duoer.campus.entity.Cat;
-import com.duoer.campus.entity.CatTemp;
 import com.duoer.campus.entity.User;
 import com.duoer.campus.service.CatService;
 import com.duoer.campus.response.ResponseCode;
@@ -11,7 +10,6 @@ import com.duoer.campus.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -30,14 +28,12 @@ public class CatController {
     public Result addCat(@RequestBody Cat c) {
         // 若为管理员则直接完成添加，否则添加到临时表待审核
         User user = BaseContext.get();
-        String username =user.getUsername();
         Boolean isAdmin = user.getIsAdmin();
         isAdmin = isAdmin != null ? isAdmin : false;
-        c.setRecordCount(0);
-        int status = catService.addCat(isAdmin ? c : new CatTemp(c, username), !isAdmin);
-        int code = status == 1 ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
-        String msg = status == 1 ? "" : "添加猫咪失败！";
-        return new Result(code, status, msg);
+        boolean saved = catService.addCat(c, !isAdmin);
+        int code = saved ? ResponseCode.ADD_SUC.getCode() : ResponseCode.ADD_ERR.getCode();
+        String msg = saved ? "" : "添加猫咪失败！";
+        return new Result(code, saved, msg);
     }
 
     /**

@@ -20,30 +20,11 @@ public class RecordDTOWrapper {
 
     public FeedingRecordDTO wrapFeeding(FeedingRecord fr) {
         return new FeedingRecordDTO(
-                fr.getRecordId(),
-                fr.getCatId(),
-                catMapper.selectById(fr.getCatId()).getCatName(),
-                fr.getUsername(),
-                fr.getLocationId(),
-                locationMapper.selectById(fr.getLocationId()).getLocation(),
-                fr.getRecordTime(),
-                fr.getLastUpdate(),
-                fr.getRemarks(),
-                fr instanceof FeedingRecordTemp ? ((FeedingRecordTemp) fr).getFormerId() : null
-        );
+                 );
     }
 
     public AppearanceRecordDTO wrapAppearance(AppearanceRecord ar) {
         return new AppearanceRecordDTO(
-                ar.getRecordId(),
-                ar.getCatId(),
-                catMapper.selectById(ar.getCatId()).getCatName(),
-                ar.getUsername(),
-                ar.getLocationId(),
-                locationMapper.selectById(ar.getLocationId()).getLocation(),
-                ar.getRecordTime(),
-                ar.getLastUpdate(),
-                ar instanceof AppearanceRecordTemp ? ((AppearanceRecordTemp) ar).getFormerId() : null
-        );
+                );
     }
 }

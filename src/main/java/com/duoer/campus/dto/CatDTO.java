@@ -1,23 +1,19 @@
 package com.duoer.campus.dto;
 
+import com.duoer.campus.entity.Cat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CatDTO {
-    private Long catId;
+public class CatDTO extends Cat {
     private String catName;
-    private Long categoryId;
     private String category;
-    private Long colorId;
     private String color;
-    private Long characterId;
     private String character;
-    private Long locationId;
     private String location;
-    private Integer recordCount;
-    private String username;
 }

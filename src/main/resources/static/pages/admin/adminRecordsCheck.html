@@ -58,7 +58,7 @@
                 <td v-if="feeding.formerId !== -1">修改</td>
                 <td>
                     <input type="button" @click="pas('feeding', feeding.recordId)" class="btn btn-primary btn-sm" value="通过">
-                    <input type="button" @click="rej('feeding', feeding.recordId)" class="btn btn-primary btn-sm" value="驳回">
+                    <input type="button" @click="rej('feeding', feeding)" class="btn btn-primary btn-sm" value="驳回">
                 </td>
             </tr>
         </table>
@@ -90,7 +90,7 @@
                 <td v-if="appearance.formerId !== -1">修改</td>
                 <td>
                     <input type="button" @click="pas('appearance', appearance.recordId)" class="btn btn-primary btn-sm" value="通过">
-                    <input type="button" @click="rej('appearance', appearance.recordId)" class="btn btn-primary btn-sm" value="驳回">
+                    <input type="button" @click="rej('appearance', appearance)" class="btn btn-primary btn-sm" value="驳回">
                 </td>
             </tr>
         </table>
@@ -140,8 +140,8 @@
                 }
                 await this.flush(false);
             },
-            async rej(recordType, id) {
-                let a = (await myAxios.delete('/admin/records/' + recordType + '/' + id)).data;
+            async rej(recordType, record) {
+                let a = (await myAxios.delete('/admin/records', record)).data;
                 if (a.code === 20041) {
                     this.success = true;
                     this.failed = false;
