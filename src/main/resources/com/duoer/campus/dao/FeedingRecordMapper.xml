@@ -10,8 +10,6 @@
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
-        <if test="!isAdmin">
-            and username = #{username}
-        </if>
+        and username = #{username}
     </delete>
 </mapper>
